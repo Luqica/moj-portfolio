@@ -1,9 +1,0 @@
-{
-  "manifest_version": 3,
-  "name": "Global Volume Control",
-  "version": "1.0",
-  "permissions": ["tabs", "tabCapture", "activeTab"],
-  "action": {
-    "default_popup": "popup.html"
-  }
-}
