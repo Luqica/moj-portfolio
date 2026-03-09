@@ -1,0 +1,62 @@
+body {
+    background-color: black;
+    background-image: url("wallpaper.png");
+    background-size: auto;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+h1 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+    font-size: 35px;
+    color: white;
+    margin-left: 16%;
+    animation: fadeInUp 2s ease-in;
+}
+
+a {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 30px;
+    color: white;
+    margin-left: 20%;
+    justify-content: center;
+    animation: fadeInFromLeft 3s ease-in;
+}
+
+nav {
+    margin-top: -10%;
+    margin-left: 30%;
+}
+
+.profile-picture {
+    margin-top: 3%;
+    margin-left: 3%;
+    height: 150px;
+    width: 150px;
+    border-radius: 100px;
+    border: 5px solid white;
+    animation: fadeInUp 2s ease-in;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(20px);
+    }
+}
+
