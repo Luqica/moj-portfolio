@@ -1,40 +1,38 @@
-/* 1. GLOBAL STYLES (Mobile First) */
+
 body {
     margin: 0;
     padding: 0;
-    font-size: 16px; /* Larger font is easier to read on small screens */
+    font-size: 16px;
     line-height: 1.6;
-    background-color: #121212; /* Dark theme example */
+    background-color: #121212;
     color: white;
 }
 
-/* 2. MOBILE LAYOUT (Default) */
 .container, .top-left-menu {
     display: flex;
-    flex-direction: column; /* Stack items vertically on phones */
-    align-items: center;    /* Center everything */
+    flex-direction: column;
+    align-items: center;
     width: 100%;
     padding: 20px;
-    box-sizing: border-box; /* Ensures padding doesn't break width */
+    box-sizing: border-box;
 }
 
 .nav-item, a {
     padding: 15px;
-    width: 90%;             /* Larger touch targets for fingers */
+    width: 90%;
     text-align: center;
     border-bottom: 1px solid #333;
 }
 
 img {
-    max-width: 100%;        /* Image won't spill off the screen */
+    max-width: 100%;
     height: auto;
     margin-bottom: 20px;
 }
 
-/* 3. DESKTOP UPGRADE (Screens wider than 768px) */
 @media (min-width: 768px) {
     .container, .top-left-menu {
-        flex-direction: row; /* Switch back to horizontal row */
+        flex-direction: row;
         justify-content: flex-start;
         padding: 10px 50px;
     }
@@ -45,6 +43,6 @@ img {
     }
 
     h1 {
-        font-size: 3rem; /* Bigger headers for big screens */
+        font-size: 3rem;
     }
 }
