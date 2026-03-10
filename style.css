@@ -60,79 +60,78 @@ body {
     align-items: center;
     height: 150px;
     margin-top: 5%;
-}
-
-.low-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 10px;
-}
-
-h1 {
-    font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
-    font-size: 50px;
-    color: white;
-    animation: fadeInUp 2s ease-in;
-}
-
-h2 {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 30px;
-    color: white;
-    animation: fadeInUp 2s ease-in;
-}
-
-.top-left-menu {
-    display: flex;
-    gap: 20px;
-    padding: 35px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: rgb(0,0,0,0.5);
-}
-
-.top-left-menu a{
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.top-left-menu a:hover {
-    color: #ffdd00;
-}
-.profile-picture {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 150px;
-    width: 150px;
-    border: 5px solid white;
-    animation: fadeInUp 2s ease-in;
-} /*Make a profile picture afterwards*/
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .low-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 10px;
     }
-}
 
-@keyframes fadeInFromLeft {
-    from {
-        opacity: 0;
-        transform: translateX(0);
+    h1 {
+        font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+        font-size: 50px;
+        color: white;
+        animation: fadeInUp 2s ease-in;
     }
-    to {
-        opacity: 1;
-        transform: translateX(20px);
+
+    h2 {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 30px;
+        color: white;
+        animation: fadeInUp 2s ease-in;
     }
+
+    .top-left-menu {
+        display: flex;
+        gap: 20px;
+        padding: 35px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: rgb(0,0,0,0.5);
+    }
+
+    .top-left-menu a{
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .top-left-menu a:hover {
+        color: #ffdd00;
+    }
+    .profile-picture {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 150px;
+        width: 150px;
+        border: 5px solid white;
+        animation: fadeInUp 2s ease-in;
+    } /*Make a profile picture afterwards*/
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInFromLeft {
+        from {
+            opacity: 0;
+            transform: translateX(0);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(20px);
+        }
     }
 }
