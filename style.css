@@ -11,6 +11,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: bold;
     height: 150px;
     margin-top: 5%;
 }
@@ -51,12 +52,24 @@ h2 {
     text-decoration: none;
     color: white;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 25px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 .top-left-menu a:hover {
     color: #ffdd00;
+}
+
+.paragraph1 {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    padding: 3%;
+    animation: fadeInFromLeft 2s ease-in;
+
 }
 
 @keyframes fadeInUp {
@@ -73,11 +86,11 @@ h2 {
 @keyframes fadeInFromLeft {
     from {
         opacity: 0;
-        transform: translateX(0);
+        transform: translateX(-20px);
     }
     to {
         opacity: 1;
-        transform: translateX(20px);
+        transform: translateX(0);
     }
 }
 
