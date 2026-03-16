@@ -37,6 +37,7 @@ h2 {
     animation: fadeInUp 2s ease-in;
 }
 
+
 /* --- NAVIGATION MENU (Mobile First) --- */
 .top-left-menu {
     display: flex;
@@ -78,8 +79,48 @@ h2 {
     align-items: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 60px;
+    gap:1%;
     color: white;
+    text-decoration: none;
+    animation: fadeInUp 2s ease-in;
+}
+
+.instagram {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    gap:1%;
+    font-size: 80px;
+    color: purple;
+    text-decoration: none; 
+    animation: fadeInUp 2s ease-in;
+}
+
+.linkedin {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    gap: 1%;
+    font-size: 80px;
+    color: #0966C2;
+    text-decoration: none;
+    animation: fadeInUp 2s ease-in;
+}
+
+.youtube {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    gap: 1%;
+    font-size: 80px;
+    color: #FF0034;
     text-decoration: none;
     animation: fadeInUp 2s ease-in;
 }
@@ -135,29 +176,5 @@ h2 {
     .top-left-menu a:hover {
         box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
         transform: translateY(-3px); /* Subtle lift effect */
-    }
-
-    .paragraph1 {
-    display: flex;
-    position: absolute;
-    top: 50%;
-    color: white;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: bold;
-    padding: 3%;
-    animation: fadeInFromLeft 2s ease-in;
-    }
-
-    .e-mail {
-    display: flex;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: bold;
-    font-size: 20px;
-    color: white;
-    text-decoration: none;
-    animation: fadeInUp 2s ease-in;
     }
 }
