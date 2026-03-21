@@ -36,7 +36,7 @@ h2 {
     font-size: 50px;
     color: white;
     display: flex;
-    justify-content: left;
+    justify-content: center;
     margin-left: 5%;
     align-items: center;
     animation: fadeInUp 2s ease-in;
@@ -167,6 +167,10 @@ li {
     color: #FF0034;
     text-decoration: none;
     animation: fadeInUp 2s ease-in;
+}
+
+.skills {
+    justify-content: left;
 }
 
 .lista {
