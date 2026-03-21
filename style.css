@@ -61,20 +61,17 @@ li {
     margin-top: 3%;
 }
 
-/* --- NAVIGATION MENU (Mobile First) --- */
-/* Gornja vinjeta */
 .vignette-top {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 50px; /* Koliko duboko želiš da fade ide */
+    height: 50px;
     background: linear-gradient(to bottom, #121212 0%, rgba(18, 18, 18, 0) 100%);
-    z-index: 9999; /* Da bude iznad svega */
-    pointer-events: none; /* Omogućuje da klikneš "kroz" gradijent na linkove ispod */
+    z-index: 9999;
+    pointer-events: none;
 }
 
-/* Donja vinjeta */
 .vignette-bottom {
     position: fixed;
     bottom: 0;
@@ -229,5 +226,23 @@ li {
     .top-left-menu a:hover {
         box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
         transform: translateY(-3px); /* Subtle lift effect */
+    }
+}
+
+@media (max-width: 767px) {
+    ul {
+        margin-left: 5%; /* Smanji marginu */
+        font-size: 20px; /* Smanji font da stane na ekran */
+    }
+
+    li {
+        font-size: 18px; /* Smanji font stavki */
+        margin-left: 2%;
+    }
+
+    h1, h2 {
+        font-size: 30px; /* Naslovi su ti također ogromni (50px) za mobitel */
+        text-align: center;
+        margin-left: 0;
     }
 }
