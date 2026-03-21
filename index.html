@@ -29,23 +29,6 @@
             object-fit: cover;
         }
 
-        /* Gumb za preskakanje u donjem desnom kutu */
-        .skip-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            color: white;
-            text-decoration: none;
-            font-family: Arial, sans-serif;
-            border: 1px solid white;
-            padding: 10px 20px;
-            background: rgba(0,0,0,0.5);
-            z-index: 10;
-            transition: 0.3s;
-        }
-
-        .skip-btn:hover { background: white; color: black; }
-
         /* Po zadanim postavkama, sakrij mobilni video */
         .hide-on-desktop {
             display: none;
@@ -84,8 +67,6 @@
     <video id="video-mobile" class="hide-on-desktop" autoplay muted playsinline>
         <source src="wp_video_mobile.mp4" type="video/mp4">
     </video>
-
-    <a href="start.html" class="skip-btn">Preskoči</a>
 
 <script>
     // Funkcija koja će obaviti prebacivanje stranice
