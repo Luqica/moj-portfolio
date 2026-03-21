@@ -245,7 +245,7 @@ li {
     }
 
     h1, h2 {
-        font-size: 30px; /* Naslovi su ti također ogromni (50px) za mobitel */
+        font-size: 20px; /* Naslovi su ti također ogromni (50px) za mobitel */
         text-align: center;
         justify-content: center;
         margin-left: 0;
