@@ -3,8 +3,9 @@ body {
     background-color: black;
     background-image: url("wallpaper.png");
     background-size: auto;
+    background-repeat: repeat-y;
     background-position: center;
-    background-attachment: fixed;
+    background-attachment:local;
 }
 
 /* --- HEADERS --- */
@@ -40,7 +41,6 @@ h2 {
     color: white;
     display: flex;
     justify-content: center;
-    margin-left: 5%;
     text-align: center;
     align-items: center;
     animation: fadeInUp 2s ease-in;
@@ -106,7 +106,7 @@ li {
 }
 
 .top-left-menu a:hover {
-    color: #ffdd00;
+    color: #00bbff;
 }
 
 .paragraph1 {
@@ -177,6 +177,7 @@ li {
     text-align:center;
     align-items: center;
     justify-content: left;
+    margin-left: 5%;
 }
 
 .lista {
@@ -259,7 +260,7 @@ li {
     }
 
     h2 {
-        font-size: 12px; /* Naslovi su ti također ogromni (50px) za mobitel */
+        font-size: 20px; /* Naslovi su ti također ogromni (50px) za mobitel */
         text-align: center;
         align-items: center;
         justify-content: center;

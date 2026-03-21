@@ -1,30 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="hr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luka Kolarek</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        video {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: 1280px;
+            height: 720px;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+
+        /* Gumb za preskakanje u donjem desnom kutu */
+        .skip-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            color: white;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            border: 1px solid white;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.5);
+            z-index: 10;
+            transition: 0.3s;
+        }
+
+        .skip-btn:hover { background: white; color: black; }
+
+        /* Po zadanim postavkama, sakrij mobilni video */
+        .hide-on-desktop {
+            display: none;
+        }
+
+        /* Na mobitelima: sakrij desktop, pokaži mobilni */
+        @media (max-width: 767px) {
+            .hide-on-mobile {
+                display: none;
+            }
+            .hide-on-desktop {
+                display: block;
+                width: 100%;
+                height: 100vh;
+                object-fit: cover;
+            }
+        }
+
+        /* Na računalima: osiguraj da je desktop vidljiv */
+        @media (min-width: 768px) {
+            .hide-on-mobile {
+                display: block;
+                width: 100%;
+                height: 100vh;
+                object-fit: cover;
+            }
+        }
+    </style>
 </head>
-
-<header>
-  <h1 class="main-header">LUKA KOLAREK</h1>
-</header>
-
-<header class="low-header">
-    <h2>(Mechatronics and Robotics Student)</h2>
-</header>
 <body>
-<div class="vignette-top"></div>
-<div class="vignette-bottom"></div>
 
-<nav class="top-left-menu">
-  <a href="about.html">O MENI</a>
-  <a href="contact.html">KONTAKT</a>
-  <a href="resume.html">ŽIVOTOPIS</a>
-</nav>
+    <video id="video-desktop" class="hide-on-mobile" autoplay muted playsinline>
+        <source src="wp_video_desktop.mp4" type="video/mp4">
+    </video>
 
-<p class="paragraph1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae vel corporis beatae facere a obcaecati? Mollitia dolore assumenda animi molestias deleniti, saepe unde earum fuga harum iusto, possimus cumque velit?</p>
+    <video id="video-mobile" class="hide-on-desktop" autoplay muted playsinline>
+        <source src="wp_video_mobile.mp4" type="video/mp4">
+    </video>
 
+    <a href="start.html" class="skip-btn">Preskoči</a>
 
+<script>
+    // Funkcija koja će obaviti prebacivanje stranice
+    function goToStart() {
+        window.location.href = "start.html";
+    }
+
+    // Pronađi oba videa
+    var videoDesktop = document.getElementById('video-desktop');
+    var videoMobile = document.getElementById('video-mobile');
+
+    // Provjeri koji je video vidljiv (ovisi o CSS-u) i dodaj mu event
+    if (window.innerWidth >= 768) {
+        videoDesktop.onended = goToStart;
+    } else {
+        videoMobile.onended = goToStart;
+    }
+
+    // Sigurnosni timer (šalje dalje nakon 6 sekundi bez obzira na sve)
+    setTimeout(goToStart, 6000);
+</script>
 </body>
 </html>
