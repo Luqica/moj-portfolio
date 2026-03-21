@@ -4,6 +4,7 @@ body {
     background-image: url("wallpaper.png");
     background-size: auto;
     background-position: center;
+    background-attachment: fixed;
 }
 
 /* --- HEADERS --- */
@@ -249,8 +250,16 @@ li {
         margin-left: 2%;
     }
 
-    h1, h2 {
+    h1{
         font-size: 20px; /* Naslovi su ti također ogromni (50px) za mobitel */
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0;
+    }
+
+    h2 {
+        font-size: 12px; /* Naslovi su ti također ogromni (50px) za mobitel */
         text-align: center;
         align-items: center;
         justify-content: center;
