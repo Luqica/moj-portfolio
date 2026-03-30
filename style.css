@@ -1,191 +1,16 @@
-/* --- OSNOVNI STILOVI (General Styles) --- */
+/* --- 1. OSNOVNI STILOVI (Zajedničko za sve uređaje) --- */
 body {
-    background-color: black;
+    background-color: rgba(0, 0, 0);
     background-image: url("wallpaper.png");
     background-size: auto;
     background-repeat: repeat-y;
     background-position: center;
-    background-attachment:local;
+    background-attachment: local;
+    margin: 0;
+    padding: 0;
 }
 
-/* --- HEADERS --- */
-.main-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-weight: bold;
-    font-size: 80px;
-    height: 150px;
-    margin-top: 10%;
-}
-
-.low-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: 10px;
-}
-
-h1 {
-    font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
-    font-size: 50px;
-    color: white;
-    animation: fadeInUp 2s ease-in;
-}
-
-h2 {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 50px;
-    color: white;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-    animation: fadeInUp 2s ease-in;
-}
-
-ul {
-    margin-left: 7%;
-    margin-top: 3%;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: bold;
-    font-size: 35px;
-    color:white;
-    animation: fadeInUp 2s ease-in;
-}
-
-li {
-    color: white;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 30px;
-    padding-top:10px;
-    margin-left: 5%;
-    margin-top: 3%;
-}
-
-.vignette-top {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 50px;
-    background: linear-gradient(to bottom, #121212 0%, rgba(18, 18, 18, 0) 100%);
-    z-index: 9999;
-    pointer-events: none;
-}
-
-.vignette-bottom {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    background: linear-gradient(to top, #121212 0%, rgba(18, 18, 18, 0) 100%);
-    z-index: 9999;
-    pointer-events: none;
-}
-
-.top-left-menu {
-    display: flex;
-    gap: 20px;
-    padding: 35px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: rgb(0,0,0,0.5);
-}
-
-.top-left-menu a{
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-    font-size: 25px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.top-left-menu a:hover {
-    color: #00bbff;
-}
-
-.paragraph1 {
-    display: flex;
-    position: absolute;
-    top: 50%;
-    color: white;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: bold;
-    padding: 3%;
-    animation: fadeInFromLeft 2s ease-in;
-}
-
-.e-mail {
-    display: flex;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: bold;
-    font-size: 60px;
-    gap:1%;
-    color: white;
-    text-decoration: none;
-    animation: fadeInUp 2s ease-in;
-}
-
-.instagram {
-    display: flex;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    margin-top: 5%;
-    gap:1%;
-    font-size: 80px;
-    color: purple;
-    text-decoration: none; 
-    animation: fadeInUp 2s ease-in;
-}
-
-.linkedin {
-    display: flex;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    margin-top: 5%;
-    gap: 1%;
-    font-size: 80px;
-    color: #0966C2;
-    text-decoration: none;
-    animation: fadeInUp 2s ease-in;
-}
-
-.youtube {
-    display: flex;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    margin-top: 5%;
-    gap: 1%;
-    font-size: 80px;
-    color: #FF0034;
-    text-decoration: none;
-    animation: fadeInUp 2s ease-in;
-}
-
-.skills {
-    text-align:center;
-    align-items: center;
-    justify-content: left;
-    margin-left: 5%;
-}
-
-.lista {
-    color: white;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    padding:3%;
-}
-
+/* --- ANIMACIJE --- */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -208,62 +33,297 @@ li {
     }
 }
 
-/* --- RAČUNALO (Desktop - Screens wider than 768px) --- */
-@media (min-min-width: 768px) {
-    .main-header {
-        padding: 80px 20px 20px 20px;
-    }
-
-    .main-header h1 {
-        font-size: 4.5rem;
-    }
-
-    .top-left-menu {
-        flex-direction: row;      /* Horizontal layout for desktop */
-        justify-content: center;  /* Center the links */
-        background-color: transparent;
-        border: none;
-        gap: 30px;                /* Space between links */
-        margin-top: 20px;
-    }
-
-    .top-left-menu a {
-        border: 2px solid #00d4ff;
-        border-radius: 5px;
-        padding: 12px 30px;
-        min-width: 120px;
-    }
-
-    .top-left-menu a:hover {
-        box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
-        transform: translateY(-3px); /* Subtle lift effect */
-    }
+@keyframes wheel {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); } /* Moves halfway and resets perfectly */
 }
 
-@media (max-width: 767px) {
-    ul {
-        margin-left: 5%; /* Smanji marginu */
-        font-size: 20px; /* Smanji font da stane na ekran */
-    }
-
-    li {
-        font-size: 18px; /* Smanji font stavki */
-        margin-left: 2%;
-    }
-
-    h1{
-        font-size: 20px; /* Naslovi su ti također ogromni (50px) za mobitel */
-        text-align: center;
-        align-items: center;
+/* --- 2. RAČUNALO (Desktop - Ekrani širi od 768px) --- */
+@media (min-width: 768px) {
+    .main-header {
+        display: flex;
         justify-content: center;
-        margin-left: 0;
+        align-items: center;
+        text-align: center;
+        font-weight: bold;
+        font-size: 80px;
+        height: 100px;
+        margin-top: 10%;
+    }
+
+    .low-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 10px;
+    }
+
+    h1 {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 50px;
+        color: white;
+        animation: fadeInUp 2s ease-in;
     }
 
     h2 {
-        font-size: 20px; /* Naslovi su ti također ogromni (50px) za mobitel */
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 50px;
+        color: white;
+        display: flex;
+        justify-content: center;
         text-align: center;
         align-items: center;
+        animation: fadeInUp 2s ease-in;
+    }
+
+    h3 {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 35px;
+        color: white;
+        display: flex;
+        padding: 20px;
+
+    }
+
+    
+    ul {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: bold;
+        font-size: 35px;
+        color: white;
+        padding: 0px 0px 30px 100px;
+    }
+    
+    li {
+        color: white;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 30px;
+        padding-top: 10px;
+        margin-left: 5%;
+        margin-top: 3%;
+    }
+    
+    .top-left-menu {
+        display: flex;
+        gap: 20px;
+        padding: 35px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    .top-left-menu a {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        font-size: 25px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    .top-left-menu a:hover {
+        color: #00bbff;
+    }
+    
+    .profile-picture {
+        display: flex;
         justify-content: center;
+        align-items: center;
+        margin-top: 10%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 330px;
+        height: 300px;
+        margin-bottom: 20px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    
+    .profile-pic {
+        width: 100%;
+        height: auto;
+    }
+    
+    .instagram, .linkedin, .youtube {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 5%;
+        gap: 2%;
+        font-size: 80px;
+        text-decoration: none;
+        animation: fadeInUp 2s ease-in;
+    }
+    
+    .e-mail {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2%;
+        font-size: 60px;
+        color: white;
+        text-decoration: none;
+        font-family: Verdana, sans-serif;
+        animation: fadeInUp 2s ease-in;
+    }
+    /* Gornja vinjeta */
+    .vignette-top {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 50px; /* Koliko duboko želiš da fade ide */
+        background: linear-gradient(to bottom, #121212 0%, rgba(0, 0, 0, 0) 100%);
+        z-index: 9999; /* Da bude iznad svega */
+        pointer-events: none; /* Omogućuje da klikneš "kroz" gradijent na linkove ispod */
+    }
+    
+    /* Donja vinjeta */
+    .vignette-bottom {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 30px;
+        background: linear-gradient(to top, #121212 0%, rgba(0, 0, 0, 0) 100%);
+        z-index: 9999;
+        pointer-events: none;
+    }
+    
+    .o-meni {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: bold;
+        font-size: 25px;
+        line-height: 170%;
+        text-align: center;
+        justify-content: center;
+        color: white;
+        padding: 20px 30px 10px 30px;
+    }
+
+    .skills {
+        padding:20px 0px 50px 0px; 
+    }
+
+    /* 1. Define the appearance animation */
+    @keyframes reveal {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* 2. Apply it to your items */
+    .appear {
+    view-timeline-name: --revealing-item;
+    view-timeline-axis: block;
+
+    /* Link animation to the timeline */
+    animation: linear reveal both;
+    animation-timeline: --revealing-item;
+
+    /* Adjust when the animation starts/ends (e.g., start when 10% visible) */
+    animation-range: entry 10% cover 30%;
+    }
+
+    .quote-container {
+        overflow: hidden;
+        white-space: nowrap;
+        padding: 0 0 80px 0;
+    }
+
+    .quote-track{
+        display: inline-block;
+        display: flex;
+        gap: 150px;
+        animation: wheel 20s linear infinite;
+    }
+    
+    .quote-track span {
+        font-size: 25px;
+        font-weight: bold;
+        color: white;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-style: italic;
+    }
+
+    .quote-container:hover .quote-track {
+    animation-play-state: paused;
+    }
+}
+
+/* --- 3. MOBITEL (Mobile - Ekrani manji od 767px) --- */
+@media (max-width: 767px) {
+    .main-header {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        color: white;
+        font-size: 35px; /* Ispravljeno sa 5px */
+        margin-top: 20%;
+        height: auto;
+    }
+
+    h1 {
+        font-size: 28px;
+        text-align: center;
         margin-left: 0;
+        justify-content: center;
+    }
+
+    h2 {
+        font-size: 23px;
+        text-align: center;
+        margin-left: 0;
+        justify-content: center;
+    }
+
+    .top-left-menu {
+        display: flex;
+        justify-content: center;
+        padding: 15px;
+        gap: 15px;
+        position: relative;
+        background-color: rgba(0, 0, 0, 0.8);
+        width: 100%;
+    }
+
+    .top-left-menu a {
+        font-size: 16px;
+    }
+
+    .profile-picture {
+        display: flex;
+        justify-content: center;
+        margin: 10% auto;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    ul, li {
+        font-size: 18px;
+        margin-left: 5%;
+    }
+
+    .instagram, .linkedin, .youtube {
+        font-size: 50px;
+        justify-content: center;
+        display: flex;
+        margin-top: 10%;
+    }
+
+    .e-mail {
+        font-size: 25px;
+        text-align: center;
+        display: block;
+        margin-top: 10%;
     }
 }
