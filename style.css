@@ -38,6 +38,17 @@ body {
   to { transform: translateX(-50%); } /* Moves halfway and resets perfectly */
 }
 
+@keyframes reveal {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* --- 2. RAČUNALO (Desktop - Ekrani širi od 768px) --- */
 @media (min-width: 768px) {
     .main-header {
@@ -85,7 +96,6 @@ body {
         padding: 20px;
 
     }
-
     
     ul {
         font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -145,7 +155,7 @@ body {
         height: auto;
     }
     
-    .instagram, .linkedin, .youtube {
+    .instagram, .linkedin, .youtube, .e-mail {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -155,31 +165,18 @@ body {
         text-decoration: none;
         animation: fadeInUp 2s ease-in;
     }
-    
-    .e-mail {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 2%;
-        font-size: 60px;
-        color: white;
-        text-decoration: none;
-        font-family: Verdana, sans-serif;
-        animation: fadeInUp 2s ease-in;
-    }
-    /* Gornja vinjeta */
+
     .vignette-top {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
-        height: 50px; /* Koliko duboko želiš da fade ide */
+        height: 50px;
         background: linear-gradient(to bottom, #121212 0%, rgba(0, 0, 0, 0) 100%);
-        z-index: 9999; /* Da bude iznad svega */
-        pointer-events: none; /* Omogućuje da klikneš "kroz" gradijent na linkove ispod */
+        z-index: 9999;
+        pointer-events: none;
     }
-    
-    /* Donja vinjeta */
+
     .vignette-bottom {
         position: fixed;
         bottom: 0;
@@ -195,7 +192,7 @@ body {
         font-family: Verdana, Geneva, Tahoma, sans-serif;
         font-weight: bold;
         font-size: 25px;
-        line-height: 170%;
+        line-height: 50px;
         text-align: center;
         justify-content: center;
         color: white;
@@ -203,10 +200,9 @@ body {
     }
 
     .skills {
-        padding:20px 0px 50px 0px; 
+        padding: 20px 0px 50px 0px; 
     }
 
-    /* 1. Define the appearance animation */
     @keyframes reveal {
         from {
             opacity: 0;
@@ -218,17 +214,14 @@ body {
         }
     }
 
-    /* 2. Apply it to your items */
     .appear {
-    view-timeline-name: --revealing-item;
-    view-timeline-axis: block;
+        view-timeline-name: --revealing-item;
+        view-timeline-axis: block;
 
-    /* Link animation to the timeline */
-    animation: linear reveal both;
-    animation-timeline: --revealing-item;
+        animation: linear reveal both;
+        animation-timeline: --revealing-item;
 
-    /* Adjust when the animation starts/ends (e.g., start when 10% visible) */
-    animation-range: entry 10% cover 30%;
+        animation-range: entry 10% cover 30%;
     }
 
     .quote-container {
@@ -256,74 +249,198 @@ body {
     animation-play-state: paused;
     }
 }
-
+/*###############################################################################################3*/
 /* --- 3. MOBITEL (Mobile - Ekrani manji od 767px) --- */
 @media (max-width: 767px) {
     .main-header {
         display: flex;
         justify-content: center;
+        align-items: center;
         text-align: center;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        color: white;
-        font-size: 35px; /* Ispravljeno sa 5px */
-        margin-top: 20%;
+        font-size: 50px;
+        max-width: 100%;
         height: auto;
+        padding: 10% 0 15px 0;
+    }
+    
+    .low-header {
+        display: flex;
+        font-size: 40px;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        max-width: 100%;
+        height: auto;
+        padding: 0 0 3% 0;
     }
 
     h1 {
-        font-size: 28px;
-        text-align: center;
-        margin-left: 0;
-        justify-content: center;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 40px;
+        color: #ffffff;
+        animation: fadeInUp 2s ease-in;
     }
 
     h2 {
-        font-size: 23px;
-        text-align: center;
-        margin-left: 0;
-        justify-content: center;
-    }
-
-    .top-left-menu {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 30px;
+        color: white;
         display: flex;
         justify-content: center;
-        padding: 15px;
-        gap: 15px;
-        position: relative;
-        background-color: rgba(0, 0, 0, 0.8);
-        width: 100%;
+        text-align: center;
+        align-items: center;
+        animation: fadeInUp 2s ease-in;
     }
 
+    h3 {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: bold;
+        font-size: 25px;
+        color: white;
+        display: flex;
+        padding: 20px;
+    }
+
+    ul {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: bold;
+        font-size: 25px;
+        color: white;
+        padding: 0px 0px 15px 70px;
+    }
+    
+    li {
+        color: white;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 20px;
+        padding: 5px 0 5px 15px;
+        margin-left: 5%;
+        margin-top: 3%;
+    }
+    
+    .top-left-menu {
+        display: flex;
+        gap: 20px;
+        padding: 35px;
+        position: absolute;
+        max-width: 100%;
+        height: auto;
+        top: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    
     .top-left-menu a {
-        font-size: 16px;
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        font-family: Arial, Helvetica, sans-serif;
     }
-
+    
+    .top-left-menu a:hover {
+        color: #00bbff;
+    }
+    
     .profile-picture {
         display: flex;
         justify-content: center;
-        margin: 10% auto;
-        width: 200px;
-        height: 200px;
+        align-items: center;
+        margin-top: 10%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 275px;
+        height: 250px;
+        margin-bottom: 20px;
         border-radius: 50%;
         overflow: hidden;
     }
-
-    ul, li {
-        font-size: 18px;
-        margin-left: 5%;
+    
+    .profile-pic {
+        width: 100%;
+        height: auto;
     }
-
-    .instagram, .linkedin, .youtube {
-        font-size: 50px;
-        justify-content: center;
+    
+    .instagram, .linkedin, .youtube, .e-mail {
         display: flex;
-        margin-top: 10%;
+        justify-content: center;
+        align-items: center;
+        padding: 30px 0 30px 0;
+        gap: 2%;
+        font-size: 30px;
+        text-decoration: none;
+        animation: fadeInUp 2s ease-in;
+    }
+    
+    .vignette-top {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 50px;
+        background: linear-gradient(to bottom, #121212 0%, rgba(0, 0, 0, 0) 100%);
+        z-index: 9999;
+        pointer-events: none;
+    }
+    
+    .vignette-bottom {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 30px;
+        background: linear-gradient(to top, #121212 0%, rgba(0, 0, 0, 0) 100%);
+        z-index: 9999;
+        pointer-events: none;
     }
 
-    .e-mail {
-        font-size: 25px;
+    .o-meni {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 40px;
         text-align: center;
-        display: block;
-        margin-top: 10%;
+        justify-content: center;
+        color: white;
+        padding: 20px 30px 10px 30px;
+    }
+
+    .skills {
+        padding: 10px 0px 30px 0px; 
+    }
+
+    .appear {
+        view-timeline-name: --revealing-item;
+        view-timeline-axis: block;
+
+        animation: linear reveal both;
+        animation-timeline: --revealing-item;
+
+        animation-range: entry 10% cover 30%;
+    }
+
+    .quote-container {
+        overflow: hidden;
+        white-space: nowrap;
+        padding: 0 0 80px 0;
+    }
+
+    .quote-track{
+        display: inline-block;
+        display: flex;
+        gap: 150px;
+        animation: wheel 20s linear infinite;
+    }
+    
+    .quote-track span {
+        font-size: 25px;
+        font-weight: bold;
+        color: white;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-style: italic;
+    }
+
+    .quote-container:hover .quote-track {
+    animation-play-state: paused;
     }
 }
