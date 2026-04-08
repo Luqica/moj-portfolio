@@ -159,9 +159,9 @@ body {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 5%;
-        gap: 2%;
-        font-size: 80px;
+        margin-top: 3%;
+        gap: 1%;
+        font-size: 50px;
         text-decoration: none;
         animation: fadeInUp 2s ease-in;
     }
