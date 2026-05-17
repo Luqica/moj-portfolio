@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="hr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luka Kolarek - Portfolio</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Rajdhani:wght@500;600;700&family=Titillium+Web:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Intro Video Screen -->
+    <div id="intro-screen" class="video-container">
+        <video id="video-desktop" class="bg-video hide-on-mobile" autoplay muted playsinline>
+            <source src="wp_video_desktop.mp4" type="video/mp4">
+        </video>
+        <video id="video-mobile" class="bg-video hide-on-desktop" autoplay muted playsinline>
+            <source src="wp_video_mobile.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Vignettes -->
+    <div class="vignette-top"></div>
+    <div class="vignette-bottom"></div>
+
+    <!-- Navigation -->
+    <nav class="tech-nav">
+        <div class="nav-brand" onclick="resetIntro()" style="cursor: pointer; transition: text-shadow 0.3s;"
+            onmouseover="this.style.textShadow='0 0 10px var(--accent-blue)'" onmouseout="this.style.textShadow='none'">
+            <i class="fa-solid fa-microchip"></i> LK</div>
+        <div class="nav-links">
+            <a href="#home">Početna</a>
+            <a href="#about">O meni</a>
+            <a href="#skills">Vještine</a>
+            <a href="#contact">Kontakt</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content-wrapper">
+
+        <!-- Splash / Home Section -->
+        <section id="home" class="section hero-section reveal">
+            <div class="hero-content">
+                <h1 class="main-header">LUKA KOLAREK</h1>
+                <h2 class="sub-header typewriter">Mechatronics and Robotics Student</h2>
+                <a href="#about" class="scroll-indicator">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section reveal">
+            <div class="glass-card layout-split">
+                <div class="profile-col">
+                    <div class="profile-pic-container">
+                        <img class="profile-picture" src="profile_pic.png" alt="Luka Kolarek">
+                        <div class="glow-ring"></div>
+                    </div>
+                </div>
+                <div class="text-col">
+                    <h2 class="section-title glitch-effect" data-value="O MENI">O MENI</h2>
+                    <p class="about-text">
+                        Ja sam Luka, student Mehatronike i Robotike na <a href="https://www.fsb.unizg.hr"
+                            target="_blank">Fakultetu Strojarstva i brodogradnje</a> Sveučilišta u Zagrebu. Strastveni
+                        sam entuzijast mehatronike koji uživa u svijetu tehnike.
+                    </p>
+                    <p class="about-text">
+                        Trenutno sam fokusiran na: poboljšanje vještine programiranja, rješavanje kompleksnih mehaničkih
+                        problema i kreiranje te razvoj proizvoda.
+                    </p>
+                    <p class="about-text">
+                        Uživam u dinamičnom okruženju i upoznavanju novih ljudi, što mi pomaže da razvijem perspektivu o
+                        potrebama i zahtjevima svakodnevnog korisnika. Volim dobru atmosferu i druženje s ljudima koji
+                        me inspiriraju i potiču na rad.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quotes Section -->
+        <section id="quotes" class="section reveal">
+            <h2 class="section-title center-title glitch-effect" data-value="INSPIRACIJA" style="margin-bottom: 2rem;">
+                INSPIRACIJA</h2>
+            <div class="quote-container glass-card">
+                <div class="quote-track">
+                    <span>"Opsesija uvijek pobjeđuje talent."</span>
+                    <span>"Prednost gubitka je učenje na greškama."</span>
+                    <span>"Per aspera ad astra."</span>
+                    <span>"Strah ubija snove više nego što će neuspjeh ikada."</span>
+                    <span>"Najteži dio završetka je novi početak."</span>
+                    <span>"Novac nikada nije kupio ni sekundu vremena."</span>
+                    <span>"Imperare sibi maximum imperium est."</span>
+                    <!-- Duplicate for infinite scroll -->
+                    <span>"Opsesija uvijek pobjeđuje talent."</span>
+                    <span>"Prednost gubitka je učenje na greškama."</span>
+                    <span>"Per aspera ad astra."</span>
+                    <span>"Strah ubija snove više nego što će neuspjeh ikada."</span>
+                    <span>"Najteži dio završetka je novi početak."</span>
+                    <span>"Novac nikada nije kupio ni sekundu vremena."</span>
+                    <span>"Imperare sibi maximum imperium est."</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="section reveal">
+            <h2 class="section-title center-title glitch-effect" data-value="VJEŠTINE">VJEŠTINE</h2>
+            <div class="skills-grid">
+
+                <!-- Programming -->
+                <div class="skill-card glass-card">
+                    <h3><i class="fa-solid fa-code"></i> Programiranje</h3>
+                    <ul class="skill-list">
+                        <li><i class="fa-brands fa-html5 skill-icon html-color"></i> HTML</li>
+                        <li><i class="fa-brands fa-css3-alt skill-icon css-color"></i> CSS</li>
+                        <li><i class="fa-brands fa-python skill-icon python-color"></i> Python</li>
+                        <li><i class="fa-brands fa-cuttlefish skill-icon cpp-color"></i> C++</li>
+                    </ul>
+                </div>
+
+                <!-- Languages -->
+                <div class="skill-card glass-card">
+                    <h3><i class="fa-solid fa-language"></i> Jezici</h3>
+                    <ul class="skill-list">
+                        <li>Hrvatski</li>
+                        <li>Engleski</li>
+                        <li>Talijanski</li>
+                    </ul>
+                </div>
+
+                <!-- Media -->
+                <div class="skill-card glass-card">
+                    <h3><i class="fa-solid fa-photo-film"></i> Produkcija</h3>
+                    <ul class="skill-list">
+                        <li><i class="fa-solid fa-video skill-icon"></i> Final Cut Pro</li>
+                        <li><i class="fa-solid fa-compact-disc skill-icon"></i> Logic Pro</li>
+                    </ul>
+                </div>
+
+                <!-- CAD -->
+                <div class="skill-card glass-card">
+                    <h3><i class="fa-solid fa-compass-drafting"></i> Dizajn</h3>
+                    <ul class="skill-list">
+                        <li><i class="fa-solid fa-paintbrush skill-icon"></i> Onshape</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section reveal">
+            <div class="glass-card contact-card">
+                <h2 class="section-title center-title glitch-effect" data-value="KONTAKT">KONTAKT</h2>
+                <div class="social-grid">
+                    <a href="mailto:kolareklukabusiness@gmail.com" class="social-btn email-btn">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>Pošalji Mail</span>
+                    </a>
+                    <a href="https://www.instagram.com/luka.kolarek" target="_blank" class="social-btn insta-btn">
+                        <i class="fa-brands fa-instagram"></i>
+                        <span>Instagram</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/luka-kolarek-37b2a138b/" target="_blank"
+                        class="social-btn linkedin-btn">
+                        <i class="fa-brands fa-linkedin"></i>
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="https://www.youtube.com/@lukakolarek" target="_blank" class="social-btn youtube-btn">
+                        <i class="fa-brands fa-youtube"></i>
+                        <span>YouTube</span>
+                    </a>
+                </div>
+
+                <div class="resume-download">
+                    <a href="Životopis.docx" download="Luka_Kolarek_Zivotopis.docx" class="glass-btn primary">
+                        <i class="fa-solid fa-download"></i> Preuzmi Životopis
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+
+</html>
