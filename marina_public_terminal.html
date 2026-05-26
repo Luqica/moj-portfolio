@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.A.R.I.N.A. Portable Systems Terminal</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #030a16;
+            --primary-color: #00f3ff;
+            --primary-dim: rgba(0, 243, 255, 0.3);
+            --secondary-color: #0066ff;
+            --text-main: #e0f8ff;
+            --text-dim: #70a0b0;
+            --alert-color: #ff3366;
+            --font-tech: 'Share Tech Mono', monospace;
+            --font-ui: 'Rajdhani', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Background Effects */
+        .overlay-grid {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(var(--primary-dim) 1px, transparent 1px),
+                linear-gradient(90deg, var(--primary-dim) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+            transform: perspective(500px) rotateX(60deg) scale(2);
+            transform-origin: top center;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 0 40px; }
+        }
+
+        .vignette {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 30%, var(--bg-color) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 20px 40px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--primary-dim);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .header-left, .header-right {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary-color);
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .sys-info {
+            font-family: var(--font-tech);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .time-display {
+            font-family: var(--font-tech);
+            font-size: 2rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .date-display {
+            font-weight: 600;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+        }
+
+        /* Main Layout */
+        main {
+            flex: 1;
+            display: flex;
+            gap: 40px;
+            overflow: hidden;
+        }
+
+        /* Left side Visualizer (Arc Reactor) */
+        .visualizer-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .arc-reactor {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+
+        .arc-reactor.state-listening .core {
+            background: radial-gradient(circle, #00f3ff 0%, #0066ff 70%, transparent 100%);
+            box-shadow: 0 0 40px var(--primary-color), inset 0 0 40px var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .arc-reactor.state-listening .ring {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px var(--primary-color), inset 0 0 20px var(--primary-color);
+            animation-duration: 2s;
+        }
+
+        .arc-reactor.state-thinking .core {
+            background: radial-gradient(circle, #ff00ff 0%, #6600ff 70%, transparent 100%);
+            box-shadow: 0 0 40px #ff00ff, inset 0 0 40px #ff00ff;
+            transform: scale(0.9);
+        }
+
+        .arc-reactor.state-thinking .ring {
+            border-color: #ff00ff;
+            box-shadow: 0 0 20px #ff00ff, inset 0 0 20px #ff00ff;
+            animation-direction: reverse;
+            animation-duration: 1.5s;
+        }
+
+        .arc-reactor.state-speaking .core {
+            background: radial-gradient(circle, #00ffaa 0%, #009966 70%, transparent 100%);
+            box-shadow: 0 0 40px #00ffaa, inset 0 0 40px #00ffaa;
+            animation: pulse 0.3s infinite alternate;
+        }
+
+        .arc-reactor.state-speaking .ring {
+            border-color: #00ffaa;
+            box-shadow: 0 0 20px #00ffaa, inset 0 0 20px #00ffaa;
+        }
+
+        .arc-reactor.phone-listening .core {
+            background: radial-gradient(circle, #ff0055 0%, #ff00aa 70%, transparent 100%);
+            box-shadow: 0 0 40px #ff0055, inset 0 0 40px #ff0055;
+            animation: pulse 0.4s infinite alternate;
+        }
+
+        .arc-reactor.phone-listening .ring {
+            border-color: #ff0055;
+            box-shadow: 0 0 20px #ff0055, inset 0 0 20px #ff0055;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(0.95); opacity: 0.8; }
+            to { transform: scale(1.05); opacity: 1; }
+        }
+
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid var(--primary-dim);
+            box-shadow: 0 0 10px var(--primary-dim), inset 0 0 10px var(--primary-dim);
+            transition: all 0.5s ease;
+        }
+
+        .outer-ring {
+            width: 280px; height: 280px;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+            animation: spin 10s linear infinite;
+        }
+
+        .middle-ring {
+            width: 220px; height: 220px;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-width: 4px;
+            border-style: dashed;
+            animation: spin-reverse 15s linear infinite;
+        }
+
+        .inner-ring {
+            width: 160px; height: 160px;
+            border: 2px dashed var(--primary-dim);
+            animation: spin 8s linear infinite;
+        }
+
+        .core {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary-dim) 0%, transparent 70%);
+            box-shadow: 0 0 20px var(--primary-dim);
+            transition: all 0.5s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.5rem;
+            color: white;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+        }
+
+        .status-label {
+            position: absolute;
+            bottom: -60px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color);
+            transition: color 0.5s ease, text-shadow 0.5s ease;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+
+        /* Right side Logs */
+        .logs-container {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            background: rgba(0, 10, 20, 0.4);
+            border: 1px solid var(--primary-dim);
+            border-radius: 8px;
+            position: relative;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1) inset;
+        }
+
+        .logs-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            gap: 15px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--primary-color);
+        }
+
+        .header-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+        }
+
+        .logs-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Scrollbar styling */
+        .logs-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .logs-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 243, 255, 0.05);
+        }
+        .logs-scroll::-webkit-scrollbar-thumb {
+            background: var(--primary-dim);
+            border-radius: 3px;
+        }
+
+        .log-entry {
+            display: flex;
+            gap: 15px;
+            animation: slideIn 0.3s ease-out forwards;
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .timestamp {
+            font-family: var(--font-tech);
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            min-width: 60px;
+        }
+
+        .message {
+            flex: 1;
+            line-height: 1.4;
+            font-size: 1.1rem;
+        }
+
+        .log-entry.user .timestamp { color: #fff; }
+        .log-entry.user .message { 
+            color: #fff; 
+            border-left: 2px solid #fff;
+            padding-left: 10px;
+        }
+
+        .log-entry.marina .timestamp { color: var(--primary-color); text-shadow: 0 0 5px var(--primary-color); }
+        .log-entry.marina .message { 
+            color: var(--primary-color); 
+            text-shadow: 0 0 5px var(--primary-color);
+            border-left: 2px solid var(--primary-color);
+            padding-left: 10px;
+        }
+
+        .log-entry.system .timestamp { color: var(--text-dim); }
+        .log-entry.system .message { 
+            color: var(--text-dim); 
+            font-style: italic;
+            font-family: var(--font-tech);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 20px;
+            border-top: 1px solid var(--primary-dim);
+            padding-top: 10px;
+        }
+
+        .footer-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-tech);
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .ws-connected { color: var(--primary-color); text-shadow: 0 0 5px var(--primary-color); }
+        .ws-disconnected { color: var(--alert-color); text-shadow: 0 0 5px var(--alert-color); }
+
+        .controls-bar {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .toggle-btn {
+            background: rgba(0, 243, 255, 0.05);
+            border: 1px solid var(--primary-dim);
+            color: var(--text-dim);
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-family: var(--font-tech);
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(0, 243, 255, 0.15);
+            color: var(--primary-color);
+            box-shadow: 0 0 8px var(--primary-dim);
+        }
+
+        .toggle-btn.active {
+            background: rgba(0, 243, 255, 0.2);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            text-shadow: 0 0 5px var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-dim);
+        }
+
+        /* Terminal Typed Input Panel */
+        .input-container {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid var(--primary-dim);
+            padding: 12px 20px;
+            background: rgba(0, 5, 15, 0.7);
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 243, 255, 0.02);
+        }
+
+        .input-prompt {
+            font-family: var(--font-tech);
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 12px;
+            text-shadow: 0 0 5px var(--primary-color);
+            user-select: none;
+        }
+
+        #terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-main);
+            font-family: var(--font-tech);
+            font-size: 1.1rem;
+            letter-spacing: 1.5px;
+            caret-color: var(--primary-color);
+        }
+
+        #terminal-input::placeholder {
+            color: var(--text-dim);
+            opacity: 0.4;
+            letter-spacing: 1.5px;
+        }
+
+        /* Settings Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(3, 10, 22, 0.9);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            background: rgba(0, 15, 30, 0.95);
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2), inset 0 0 15px rgba(0, 243, 255, 0.1);
+            animation: modalGlowPulse 4s infinite alternate;
+        }
+        @keyframes modalGlowPulse {
+            from { box-shadow: 0 0 30px rgba(0, 243, 255, 0.2); }
+            to { box-shadow: 0 0 45px rgba(0, 243, 255, 0.35); }
+        }
+        .modal-title {
+            font-family: var(--font-tech);
+            color: var(--primary-color);
+            letter-spacing: 2px;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px var(--primary-color);
+            border-bottom: 1px solid var(--primary-dim);
+            padding-bottom: 10px;
+        }
+        .modal-desc {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+        .input-glow-container {
+            border: 1px solid var(--primary-dim);
+            border-radius: 4px;
+            padding: 8px 12px;
+            background: rgba(0, 5, 15, 0.8);
+            box-shadow: inset 0 0 5px rgba(0, 243, 255, 0.05);
+            margin-bottom: 25px;
+        }
+        #ws-url-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-family: var(--font-tech);
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+        .modal-btn {
+            background: transparent;
+            border: 1px solid var(--primary-dim);
+            color: var(--text-dim);
+            padding: 8px 20px;
+            font-family: var(--font-tech);
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .modal-btn:hover {
+            color: #fff;
+            border-color: #fff;
+        }
+        .save-btn {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(0, 243, 255, 0.05);
+            text-shadow: 0 0 5px var(--primary-color);
+        }
+        .save-btn:hover {
+            background: rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 10px var(--primary-dim);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* Responsive design for iPhone and other small screens */
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+            }
+            .container {
+                padding: 15px 20px;
+                height: auto;
+                min-height: 100vh;
+            }
+            header {
+                flex-direction: row;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+            .sys-info {
+                display: none;
+            }
+            main {
+                flex-direction: column;
+                gap: 20px;
+                overflow: visible;
+            }
+            .visualizer-container {
+                padding: 20px 0;
+            }
+            .arc-reactor {
+                width: 220px;
+                height: 220px;
+            }
+            .outer-ring { width: 210px; height: 210px; }
+            .middle-ring { width: 160px; height: 160px; }
+            .inner-ring { width: 120px; height: 120px; }
+            .core { width: 80px; height: 80px; font-size: 2.8rem; }
+            .status-label {
+                bottom: -40px;
+                font-size: 1.2rem;
+                letter-spacing: 4px;
+            }
+            .logs-container {
+                min-height: 350px;
+                max-height: 50vh;
+            }
+            .time-display { font-size: 1.5rem; }
+            .date-display { font-size: 0.9rem; }
+            .footer-bar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                padding-bottom: 15px;
+            }
+            .controls-bar {
+                justify-content: center;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay-grid"></div>
+    <div class="vignette"></div>
+
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <div class="header-left">
+                <div class="system-status">
+                    <span class="status-indicator"></span>
+                    <span class="status-text">SYSTEM ONLINE</span>
+                </div>
+                <div class="sys-info">M.A.R.I.N.A. v2.0 // PORTABLE_AUTONOMOUS_RESPONSE_INTELLIGENT_NETWORK_ASSISTANT</div>
+            </div>
+            <div class="header-right">
+                <div class="time-display" id="clock">00:00:00</div>
+                <div class="date-display" id="date">JAN 01, 2026</div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Center Visualizer -->
+            <div class="visualizer-container">
+                <div class="arc-reactor" id="reactor">
+                    <div class="ring outer-ring"></div>
+                    <div class="ring middle-ring"></div>
+                    <div class="ring inner-ring"></div>
+                    <div class="core"></div>
+                    <div class="status-label" id="marina-state">ASLEEP</div>
+                </div>
+            </div>
+
+            <!-- Chat / Logs Panel -->
+            <div class="logs-container">
+                <div class="logs-header">
+                    <div class="header-line"></div>
+                    <span>COMMUNICATION FEED</span>
+                    <div class="header-line"></div>
+                </div>
+                <div class="logs-scroll" id="logs-container">
+                    <!-- Logs will appear here dynamically -->
+                    <div class="log-entry system">
+                        <span class="timestamp">[SYS]</span>
+                        <span class="message">M.A.R.I.N.A. Portable Interface Initialized. Please link terminal to begin.</span>
+                    </div>
+                </div>
+                <div class="input-container">
+                    <span class="input-prompt">&gt;</span>
+                    <input type="text" id="terminal-input" placeholder="ENTER COMMAND..." autocomplete="off">
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer Info -->
+        <footer>
+            <div class="footer-bar">
+                <div class="controls-bar">
+                    <button class="toggle-btn active" id="btn-voice" onclick="toggleVoice()">🔊 VOICE: ON</button>
+                    <button class="toggle-btn" id="btn-handsfree" onclick="toggleHandsfree()">🎙️ AUTO: OFF</button>
+                </div>
+                <span>PORTABLE UPLINK</span>
+                <span>CONNECTION: <span id="ws-status" class="ws-disconnected">DISCONNECTED</span> <span id="btn-settings" style="cursor: pointer; margin-left: 8px; font-size: 1rem;" onclick="openSettings()">⚙️</span></span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="modal-title">TERMINAL UPLINK SETUP</h3>
+            <p class="modal-desc">Enter your secure local IP address or public WebSocket tunnel URL to bind your device to M.A.R.I.N.A. Core.</p>
+            <div class="input-glow-container">
+                <input type="text" id="ws-url-input" placeholder="wss://xxxxxx.lhr.life or wss://192.168.1.x:8765" autocomplete="off">
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn cancel-btn" onclick="closeSettings()">CANCEL</button>
+                <button class="modal-btn save-btn" onclick="saveSettings()">LINK SYSTEM</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const logsContainer = document.getElementById('logs-container');
+        const wsStatus = document.getElementById('ws-status');
+        const clockEl = document.getElementById('clock');
+        const dateEl = document.getElementById('date');
+        const reactor = document.getElementById('reactor');
+        const marinaState = document.getElementById('marina-state');
+        const settingsModal = document.getElementById('settings-modal');
+        const wsUrlInput = document.getElementById('ws-url-input');
+
+        // State
+        let ws;
+        const reconnectInterval = 3000;
+        let isVoiceEnabled = true;
+        let isHandsfreeEnabled = false;
+        let recognition = null;
+        let isListeningOnPhone = false;
+        let audioCtx = null;
+        let activeAudioSource = null;
+
+        // Clock update
+        function updateClock() {
+            const now = new Date();
+            clockEl.textContent = now.toLocaleTimeString('en-US', { hour12: false });
+            
+            const options = { month: 'short', day: '2-digit', year: 'numeric' };
+            dateEl.textContent = now.toLocaleDateString('en-US', options).toUpperCase();
+            
+            // Simulate slight fluctuations in CPU/MEM for visual effect
+            if(Math.random() > 0.7) {
+                const cpuVal = document.getElementById('cpu-val');
+                if (cpuVal) cpuVal.textContent = Math.floor(10 + Math.random() * 20) + '%';
+            }
+            if(Math.random() > 0.8) {
+                const memVal = document.getElementById('mem-val');
+                if (memVal) memVal.textContent = Math.floor(40 + Math.random() * 10) + '%';
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // UI Modifiers
+        function setMarinaState(state) {
+            reactor.classList.remove('state-listening', 'state-thinking', 'state-speaking');
+            const coreEl = document.querySelector('.core');
+            
+            if (state === 'ASLEEP') {
+                marinaState.textContent = 'ASLEEP';
+                marinaState.style.color = 'var(--text-dim)';
+                marinaState.style.textShadow = 'none';
+                if (coreEl) coreEl.textContent = '';
+            } else if (state === 'LISTENING') {
+                marinaState.textContent = 'LISTENING';
+                marinaState.style.color = 'var(--primary-color)';
+                marinaState.style.textShadow = '0 0 10px var(--primary-color)';
+                reactor.classList.add('state-listening');
+                if (coreEl) coreEl.textContent = '';
+            } else if (state === 'THINKING') {
+                marinaState.textContent = 'PROCESSING...';
+                marinaState.style.color = '#ff00ff';
+                marinaState.style.textShadow = '0 0 10px #ff00ff';
+                reactor.classList.add('state-thinking');
+                if (coreEl) coreEl.textContent = '';
+            } else if (state === 'SPEAKING') {
+                marinaState.textContent = 'SPEAKING';
+                marinaState.style.color = '#00ffaa';
+                marinaState.style.textShadow = '0 0 10px #00ffaa';
+                reactor.classList.add('state-speaking');
+            }
+        }
+
+        function addLog(type, message) {
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute:'2-digit', second:'2-digit' });
+
+            entry.innerHTML = `
+                <span class="timestamp">${timeStr}</span>
+                <span class="message">${message}</span>
+            `;
+            
+            logsContainer.appendChild(entry);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+
+        // Web Audio Context prime/unlock
+        function unlockPhoneAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const buffer = audioCtx.createBuffer(1, 1, 22050);
+            const source = audioCtx.createBufferSource();
+            source.buffer = buffer;
+            source.connect(audioCtx.destination);
+            source.start(0);
+            console.log("iOS Web Audio engine successfully unlocked!");
+        }
+
+        function playAudioData(base64Data) {
+            if (!isVoiceEnabled) return;
+            
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            
+            if (activeAudioSource) {
+                try {
+                    activeAudioSource.stop();
+                } catch(e) {}
+            }
+            
+            try {
+                const binaryString = window.atob(base64Data);
+                const len = binaryString.length;
+                const bytes = new Uint8Array(len);
+                for (let i = 0; i < len; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                
+                audioCtx.decodeAudioData(bytes.buffer, (buffer) => {
+                    const source = audioCtx.createBufferSource();
+                    source.buffer = buffer;
+                    source.connect(audioCtx.destination);
+                    source.start(0);
+                    activeAudioSource = source;
+                }, (err) => {
+                    console.error("decodeAudioData error:", err);
+                });
+            } catch(e) {
+                console.error("Failed to decode base64 audio:", e);
+            }
+        }
+
+        function toggleVoice() {
+            isVoiceEnabled = !isVoiceEnabled;
+            const btn = document.getElementById('btn-voice');
+            if (isVoiceEnabled) {
+                btn.classList.add('active');
+                btn.textContent = '🔊 VOICE: ON';
+                unlockPhoneAudio();
+            } else {
+                btn.classList.remove('active');
+                btn.textContent = '🔇 VOICE: OFF';
+                if (activeAudioSource) {
+                    try {
+                        activeAudioSource.stop();
+                    } catch(e) {}
+                }
+            }
+        }
+
+        function toggleHandsfree() {
+            isHandsfreeEnabled = !isHandsfreeEnabled;
+            const btn = document.getElementById('btn-handsfree');
+            if (isHandsfreeEnabled) {
+                btn.classList.add('active');
+                btn.textContent = '🎙️ AUTO: ON';
+                addLog('system', 'Hands-free mode enabled. Listening continuously...');
+                startSpeechRecognition(true);
+            } else {
+                btn.classList.remove('active');
+                btn.textContent = '🎙️ AUTO: OFF';
+                addLog('system', 'Hands-free mode disabled.');
+                stopSpeechRecognition();
+            }
+        }
+
+        function initSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                addLog('system', 'Web Speech Recognition not supported on this browser.');
+                return false;
+            }
+            
+            recognition = new SpeechRecognition();
+            recognition.continuous = false; 
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+            
+            recognition.onstart = () => {
+                isListeningOnPhone = true;
+                setMarinaState('LISTENING');
+                reactor.classList.add('phone-listening');
+            };
+            
+            recognition.onresult = (event) => {
+                const text = event.results[0][0].transcript;
+                if (!text) return;
+                
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({
+                        type: 'command',
+                        text: text
+                    }));
+                }
+            };
+            
+            recognition.onerror = (event) => {
+                if (event.error !== 'no-speech') {
+                    console.error('Speech recognition error:', event.error);
+                    addLog('system', `Mic Error: ${event.error}`);
+                }
+                reactor.classList.remove('phone-listening');
+                isListeningOnPhone = false;
+                setMarinaState('ASLEEP');
+            };
+            
+            recognition.onend = () => {
+                reactor.classList.remove('phone-listening');
+                isListeningOnPhone = false;
+                setMarinaState('ASLEEP');
+                
+                if (isHandsfreeEnabled) {
+                    setTimeout(() => {
+                        if (isHandsfreeEnabled && !isListeningOnPhone) {
+                            startSpeechRecognition(true);
+                        }
+                    }, 500);
+                }
+            };
+            
+            return true;
+        }
+
+        function startSpeechRecognition(silent = false) {
+            if (!recognition) {
+                const success = initSpeechRecognition();
+                if (!success) return;
+            }
+            
+            if (isListeningOnPhone) return;
+            
+            try {
+                unlockPhoneAudio();
+                recognition.start();
+                if (!silent) {
+                    addLog('system', 'Phone microphone activated.');
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function stopSpeechRecognition() {
+            if (recognition && isListeningOnPhone) {
+                recognition.stop();
+            }
+        }
+
+        reactor.addEventListener('click', () => {
+            if (isListeningOnPhone) {
+                stopSpeechRecognition();
+            } else {
+                startSpeechRecognition();
+            }
+        });
+
+        // Terminal Typed Input fallback
+        const terminalInput = document.getElementById('terminal-input');
+        if (terminalInput) {
+            terminalInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const text = terminalInput.value.trim();
+                    if (text) {
+                        if (ws && ws.readyState === WebSocket.OPEN) {
+                            ws.send(JSON.stringify({
+                                type: 'command',
+                                text: text
+                            }));
+                        } else {
+                            addLog('system', 'Error: Not connected to MARINA.');
+                        }
+                        terminalInput.value = '';
+                    }
+                }
+            });
+        }
+
+        // Settings / Uplink configuration
+        function getUplinkUrl() {
+            let saved = localStorage.getItem('marina_ws_url');
+            if (saved) return saved;
+            
+            // Standard fallback using location
+            const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+            const wsHost = window.location.hostname || '127.0.0.1';
+            return `${wsProtocol}://${wsHost}:8765`;
+        }
+
+        function openSettings() {
+            wsUrlInput.value = getUplinkUrl();
+            settingsModal.classList.add('active');
+        }
+
+        function closeSettings() {
+            settingsModal.classList.remove('active');
+        }
+
+        function saveSettings() {
+            const url = wsUrlInput.value.trim();
+            if (url) {
+                localStorage.setItem('marina_ws_url', url);
+                addLog('system', `Terminal bound to uplink: ${url}`);
+                closeSettings();
+                
+                // Reconnect with new URL
+                if (ws) {
+                    ws.onclose = null; // Prevent double reconnect triggers
+                    ws.close();
+                }
+                connect();
+            }
+        }
+
+        // WebSocket Connection
+        function connect() {
+            const targetUrl = getUplinkUrl();
+            console.log(`Attempting secure connection to MARINA at: ${targetUrl}`);
+            wsStatus.textContent = 'CONNECTING...';
+            wsStatus.className = 'ws-disconnected';
+            
+            try {
+                ws = new WebSocket(targetUrl);
+            } catch(e) {
+                console.error("WebSocket initialization failed:", e);
+                setTimeout(connect, reconnectInterval);
+                return;
+            }
+            
+            ws.onopen = () => {
+                wsStatus.textContent = 'CONNECTED';
+                wsStatus.className = 'ws-connected';
+                addLog('system', 'WebSocket connection established with MARINA Core.');
+            };
+            
+            ws.onclose = () => {
+                wsStatus.textContent = 'DISCONNECTED';
+                wsStatus.className = 'ws-disconnected';
+                addLog('system', 'Connection lost. Attempting to reconnect...');
+                setMarinaState('ASLEEP');
+                setTimeout(connect, reconnectInterval);
+            };
+            
+            ws.onerror = (err) => {
+                console.error("WebSocket encountered an error:", err);
+            };
+            
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    
+                    if (data.type === 'status') {
+                        setMarinaState(data.value);
+                        if(data.value === 'ASLEEP') {
+                            addLog('system', 'MARINA entered SLEEP mode.');
+                        } else if(data.value === 'LISTENING') {
+                            addLog('system', 'MARINA is now LISTENING.');
+                        }
+                    } else if (data.type === 'command') {
+                        addLog('user', data.text);
+                    } else if (data.type === 'response') {
+                        addLog('marina', data.text);
+                        
+                        const weatherEmojis = ['☀️', '🌤️', '🌤', '⛅', '🌥️', '🌥', '☁️', '☁', '🌦️', '🌦', '🌧️', '🌧', '⛈️', '⛈', '🌩️', '🌩', '❄️', '❄', '🌫️', '🌫', '🌪️', '🌪', '💨'];
+                        const coreEl = document.querySelector('.core');
+                        if (coreEl) {
+                            for (const emoji of weatherEmojis) {
+                                if (data.text.includes(emoji)) {
+                                    coreEl.textContent = emoji;
+                                    break;
+                                }
+                            }
+                        }
+                    } else if (data.type === 'audio') {
+                        playAudioData(data.text);
+                    } else if (data.type === 'system') {
+                        addLog('system', data.text);
+                    }
+                } catch (e) {
+                    console.error('Failed to parse WebSocket message:', event.data);
+                }
+            };
+        }
+
+        // Initialize connection
+        connect();
+        setMarinaState('ASLEEP');
+
+        // Check if no custom URL has been set yet, prompt the user for it
+        if (!localStorage.getItem('marina_ws_url')) {
+            setTimeout(openSettings, 1000);
+        }
+    </script>
+</body>
+
+</html>
