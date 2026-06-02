@@ -27,12 +27,18 @@
             padding: 0;
         }
 
+        html,
+        body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: var(--font-ui);
             height: 100vh;
-            overflow: hidden;
+            overflow-y: hidden;
             position: relative;
         }
 
@@ -657,15 +663,20 @@
             }
 
             .container {
-                padding: 15px 20px;
+                padding: 15px 15px;
                 height: auto;
                 min-height: 100vh;
+                width: 100%;
+                max-width: 100vw;
             }
 
             header {
                 flex-direction: row;
                 align-items: center;
+                justify-content: space-between;
                 margin-bottom: 15px;
+                flex-wrap: wrap;
+                gap: 10px;
             }
 
             .sys-info {
@@ -717,6 +728,7 @@
             .logs-container {
                 min-height: 350px;
                 max-height: 50vh;
+                width: 100%;
             }
 
             .time-display {
@@ -738,6 +750,11 @@
                 justify-content: center;
                 width: 100%;
             }
+
+            .modal-content {
+                padding: 20px 15px;
+                width: 95%;
+            }
         }
     </style>
 </head>
@@ -754,7 +771,7 @@
                     <span class="status-indicator"></span>
                     <span class="status-text">SYSTEM ONLINE</span>
                 </div>
-                <div class="sys-info">M.A.R.I.N.A. v2.0 // Modular_Autonomous_Response_Intelligent_Network_Assistant
+                <div class="sys-info">M.A.R.I.N.A. v2.0 // PORTABLE_AUTONOMOUS_RESPONSE_INTELLIGENT_NETWORK_ASSISTANT
                 </div>
             </div>
             <div class="header-right">
@@ -899,17 +916,32 @@
                 marinaState.style.textShadow = '0 0 10px var(--primary-color)';
                 reactor.classList.add('state-listening');
                 if (coreEl) coreEl.textContent = '';
+                
+                // Auto-resume handsfree when back to listening state
+                if (isHandsfreeEnabled && !isListeningOnPhone) {
+                    startSpeechRecognition(true);
+                }
             } else if (state === 'THINKING') {
                 marinaState.textContent = 'PROCESSING...';
                 marinaState.style.color = '#ff00ff';
                 marinaState.style.textShadow = '0 0 10px #ff00ff';
                 reactor.classList.add('state-thinking');
                 if (coreEl) coreEl.textContent = '';
+                
+                // Suspend mic immediately during thinking
+                if (recognition && isListeningOnPhone) {
+                    recognition.abort();
+                }
             } else if (state === 'SPEAKING') {
                 marinaState.textContent = 'SPEAKING';
                 marinaState.style.color = '#00ffaa';
                 marinaState.style.textShadow = '0 0 10px #00ffaa';
                 reactor.classList.add('state-speaking');
+                
+                // Suspend mic immediately during speaking
+                if (recognition && isListeningOnPhone) {
+                    recognition.abort();
+                }
             }
         }
 
@@ -945,8 +977,62 @@
             console.log("iOS Web Audio engine successfully unlocked!");
         }
 
+        let audioPlayTimeout = null;
+        let audioQueue = [];
+        let isAudioPlaying = false;
+
+        function sendAudioState(state) {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: 'audio_state',
+                    value: state
+                }));
+            }
+        }
+
         function playAudioData(base64Data) {
             if (!isVoiceEnabled) return;
+            
+            // Push chunk into queue
+            audioQueue.push(base64Data);
+            
+            // If not playing, begin processing queue
+            if (!isAudioPlaying) {
+                processAudioQueue();
+            }
+        }
+
+        function stopAllAudio() {
+            audioQueue = [];
+            isAudioPlaying = false;
+            if (activeAudioSource) {
+                try {
+                    activeAudioSource.stop();
+                } catch (e) { }
+                activeAudioSource = null;
+            }
+            if (audioPlayTimeout) {
+                clearTimeout(audioPlayTimeout);
+                audioPlayTimeout = null;
+            }
+            sendAudioState('idle');
+        }
+
+        function processAudioQueue() {
+            if (audioQueue.length === 0) {
+                isAudioPlaying = false;
+                if (audioPlayTimeout) clearTimeout(audioPlayTimeout);
+                audioPlayTimeout = setTimeout(() => {
+                    sendAudioState('idle');
+                    if (isHandsfreeEnabled && !isListeningOnPhone) {
+                        startSpeechRecognition(true);
+                    }
+                }, 800);
+                return;
+            }
+
+            isAudioPlaying = true;
+            const base64Data = audioQueue.shift();
 
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -955,10 +1041,15 @@
                 audioCtx.resume();
             }
 
-            if (activeAudioSource) {
-                try {
-                    activeAudioSource.stop();
-                } catch (e) { }
+            if (audioPlayTimeout) {
+                clearTimeout(audioPlayTimeout);
+                audioPlayTimeout = null;
+            }
+
+            // Immediately send playing state and abort mic listening
+            sendAudioState('playing');
+            if (recognition && isListeningOnPhone) {
+                recognition.abort();
             }
 
             try {
@@ -973,13 +1064,21 @@
                     const source = audioCtx.createBufferSource();
                     source.buffer = buffer;
                     source.connect(audioCtx.destination);
+                    
+                    source.onended = () => {
+                        activeAudioSource = null;
+                        processAudioQueue(); // Process next item in queue
+                    };
+                    
                     source.start(0);
                     activeAudioSource = source;
                 }, (err) => {
                     console.error("decodeAudioData error:", err);
+                    processAudioQueue();
                 });
             } catch (e) {
                 console.error("Failed to decode base64 audio:", e);
+                processAudioQueue();
             }
         }
 
@@ -993,11 +1092,7 @@
             } else {
                 btn.classList.remove('active');
                 btn.textContent = '🔇 VOICE: OFF';
-                if (activeAudioSource) {
-                    try {
-                        activeAudioSource.stop();
-                    } catch (e) { }
-                }
+                stopAllAudio();
             }
         }
 
@@ -1064,7 +1159,9 @@
 
                 if (isHandsfreeEnabled) {
                     setTimeout(() => {
-                        if (isHandsfreeEnabled && !isListeningOnPhone) {
+                        // ONLY restart if handsfree is enabled, NOT already listening, and not in active speak/think states
+                        const isSpeakingOrThinking = (marinaState.textContent === 'PROCESSING...' || marinaState.textContent === 'SPEAKING');
+                        if (isHandsfreeEnabled && !isListeningOnPhone && !isSpeakingOrThinking) {
                             startSpeechRecognition(true);
                         }
                     }, 500);
@@ -1136,6 +1233,15 @@
             // Standard fallback using location
             const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
             const wsHost = window.location.hostname || '127.0.0.1';
+
+            // Auto-detect public Cloudflare tunnel domain variations
+            // Primary domain served by Cloudflare tunnel (e.g., marina.lukakolarek.from.hr)
+            // may have a dedicated WS subdomain prefixed with 'ws-'.
+            if (wsHost === 'marina.lukakolarek.from.hr' || wsHost === 'ws-marina.lukakolarek.from.hr') {
+                return 'wss://ws-marina.lukakolarek.from.hr';
+            }
+
+            // Fallback to direct host with port 8765
             return `${wsProtocol}://${wsHost}:8765`;
         }
 
@@ -1150,18 +1256,31 @@
 
         function saveSettings() {
             const url = wsUrlInput.value.trim();
-            if (url) {
-                localStorage.setItem('marina_ws_url', url);
-                addLog('system', `Terminal bound to uplink: ${url}`);
-                closeSettings();
-
-                // Reconnect with new URL
-                if (ws) {
-                    ws.onclose = null; // Prevent double reconnect triggers
-                    ws.close();
-                }
-                connect();
+            if (!url) {
+                addLog('system', 'Error: No WebSocket URL provided.');
+                return;
             }
+            // Basic validation for ws(s):// prefix
+            if (!/^wss?:\/\//i.test(url)) {
+                addLog('system', 'Error: WebSocket URL must start with ws:// or wss://');
+                return;
+            }
+            localStorage.setItem('marina_ws_url', url);
+            addLog('system', `Terminal bound to uplink: ${url}`);
+            closeSettings();
+
+            // Open HTTPS version for SSL certificate authorization if using wss
+            if (url.startsWith('wss://')) {
+                const httpsUrl = url.replace(/^wss:/i, 'https:');
+                window.open(httpsUrl, '_blank');
+            }
+
+            // Reconnect with new URL after a short delay to allow auth tab to load
+            if (ws) {
+                ws.onclose = null; // Prevent double reconnect triggers
+                ws.close();
+            }
+            setTimeout(connect, 2000);
         }
 
         function authorizeSsl() {
