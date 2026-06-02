@@ -878,6 +878,8 @@
         let isListeningOnPhone = false;
         let audioCtx = null;
         let activeAudioSource = null;
+        let latestCoords = null;
+        let hasLoggedDisconnect = false;
 
         // Clock update
         function updateClock() {
@@ -909,13 +911,19 @@
                 marinaState.textContent = 'ASLEEP';
                 marinaState.style.color = 'var(--text-dim)';
                 marinaState.style.textShadow = 'none';
-                if (coreEl) coreEl.textContent = '';
+                if (coreEl) {
+                    coreEl.textContent = '';
+                    coreEl.style.fontSize = '3.5rem';
+                }
             } else if (state === 'LISTENING') {
                 marinaState.textContent = 'LISTENING';
                 marinaState.style.color = 'var(--primary-color)';
                 marinaState.style.textShadow = '0 0 10px var(--primary-color)';
                 reactor.classList.add('state-listening');
-                if (coreEl) coreEl.textContent = '';
+                if (coreEl) {
+                    coreEl.textContent = '';
+                    coreEl.style.fontSize = '3.5rem';
+                }
                 
                 // Auto-resume handsfree when back to listening state
                 if (isHandsfreeEnabled && !isListeningOnPhone) {
@@ -926,7 +934,10 @@
                 marinaState.style.color = '#ff00ff';
                 marinaState.style.textShadow = '0 0 10px #ff00ff';
                 reactor.classList.add('state-thinking');
-                if (coreEl) coreEl.textContent = '';
+                if (coreEl) {
+                    coreEl.textContent = '';
+                    coreEl.style.fontSize = '3.5rem';
+                }
                 
                 // Suspend mic immediately during thinking
                 if (recognition && isListeningOnPhone) {
@@ -1197,11 +1208,7 @@
         }
 
         reactor.addEventListener('click', () => {
-            if (isListeningOnPhone) {
-                stopSpeechRecognition();
-            } else {
-                startSpeechRecognition();
-            }
+            toggleHandsfree();
         });
 
         // Terminal Typed Input fallback
@@ -1300,6 +1307,10 @@
                 ws = new WebSocket(targetUrl);
             } catch (e) {
                 console.error("WebSocket initialization failed:", e);
+                if (!hasLoggedDisconnect) {
+                    addLog('system', 'Connection lost. Attempting to reconnect...');
+                    hasLoggedDisconnect = true;
+                }
                 setTimeout(connect, reconnectInterval);
                 return;
             }
@@ -1308,12 +1319,23 @@
                 wsStatus.textContent = 'CONNECTED';
                 wsStatus.className = 'ws-connected';
                 addLog('system', 'WebSocket connection established with MARINA Core.');
+                hasLoggedDisconnect = false;
+                if (latestCoords && ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({
+                        type: 'location',
+                        latitude: latestCoords.lat,
+                        longitude: latestCoords.lon
+                    }));
+                }
             };
 
             ws.onclose = () => {
                 wsStatus.textContent = 'DISCONNECTED';
                 wsStatus.className = 'ws-disconnected';
-                addLog('system', 'Connection lost. Attempting to reconnect...');
+                if (!hasLoggedDisconnect) {
+                    addLog('system', 'Connection lost. Attempting to reconnect...');
+                    hasLoggedDisconnect = true;
+                }
                 setMarinaState('ASLEEP');
                 setTimeout(connect, reconnectInterval);
             };
@@ -1341,10 +1363,19 @@
                         const weatherEmojis = ['☀️', '🌤️', '🌤', '⛅', '🌥️', '🌥', '☁️', '☁', '🌦️', '🌦', '🌧️', '🌧', '⛈️', '⛈', '🌩️', '🌩', '❄️', '❄', '🌫️', '🌫', '🌪️', '🌪', '💨'];
                         const coreEl = document.querySelector('.core');
                         if (coreEl) {
-                            for (const emoji of weatherEmojis) {
-                                if (data.text.includes(emoji)) {
-                                    coreEl.textContent = emoji;
-                                    break;
+                            coreEl.textContent = '';
+                            coreEl.style.fontSize = '3.5rem';
+                            
+                            const vehicleMatch = data.text.match(/(🚌|🚋|🚃)\s*(\d+)/);
+                            if (vehicleMatch) {
+                                coreEl.textContent = `${vehicleMatch[1]} ${vehicleMatch[2]}`;
+                                coreEl.style.fontSize = '1.8rem';
+                            } else {
+                                for (const emoji of weatherEmojis) {
+                                    if (data.text.includes(emoji)) {
+                                        coreEl.textContent = emoji;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -1358,6 +1389,35 @@
                 }
             };
         }
+
+        function initLocationWatching() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        latestCoords = { lat, lon };
+                        console.log(`Updated location: ${lat}, ${lon}`);
+                        if (ws && ws.readyState === WebSocket.OPEN) {
+                            ws.send(JSON.stringify({
+                                type: 'location',
+                                latitude: lat,
+                                longitude: lon
+                            }));
+                        }
+                    },
+                    (err) => {
+                        console.warn("Geolocation warning:", err.message);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        maximumAge: 30000,
+                        timeout: 10000
+                    }
+                );
+            }
+        }
+        initLocationWatching();
 
         // Initialize connection
         connect();
