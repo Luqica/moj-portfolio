@@ -1208,7 +1208,11 @@
         }
 
         reactor.addEventListener('click', () => {
-            toggleHandsfree();
+            if (isListeningOnPhone) {
+                stopSpeechRecognition();
+            } else {
+                startSpeechRecognition();
+            }
         });
 
         // Terminal Typed Input fallback
