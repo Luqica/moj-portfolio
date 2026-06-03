@@ -1077,6 +1077,9 @@
         function processAudioQueue() {
             if (audioQueue.length === 0) {
                 isAudioPlaying = false;
+                if (!isListeningOnPhone) {
+                    setMarinaState('LISTENING');
+                }
                 if (audioPlayTimeout) clearTimeout(audioPlayTimeout);
                 audioPlayTimeout = setTimeout(() => {
                     sendAudioState('idle');
