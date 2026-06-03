@@ -908,7 +908,7 @@
             if (state === 'THINKING' || state === 'SPEAKING' || state === 'PROCESSING...') {
                 ignoreAudio = false;
             }
-            reactor.classList.remove('state-listening', 'state-thinking', 'state-speaking');
+            reactor.classList.remove('state-listening', 'state-thinking', 'state-speaking', 'phone-listening');
             const coreEl = document.querySelector('.core');
 
             if (state === 'ASLEEP') {
@@ -920,10 +920,16 @@
                     coreEl.style.fontSize = '3.5rem';
                 }
             } else if (state === 'LISTENING') {
-                marinaState.textContent = 'LISTENING';
-                marinaState.style.color = 'var(--primary-color)';
-                marinaState.style.textShadow = '0 0 10px var(--primary-color)';
-                reactor.classList.add('state-listening');
+                if (isListeningOnPhone) {
+                    marinaState.textContent = 'LISTENING';
+                    marinaState.style.color = '#ff0055';
+                    marinaState.style.textShadow = '0 0 10px #ff0055';
+                    reactor.classList.add('phone-listening');
+                } else {
+                    marinaState.textContent = 'IDLE';
+                    marinaState.style.color = 'var(--text-dim)';
+                    marinaState.style.textShadow = 'none';
+                }
                 if (coreEl) {
                     coreEl.textContent = '';
                     coreEl.style.fontSize = '3.5rem';
@@ -1142,7 +1148,6 @@
             recognition.onstart = () => {
                 isListeningOnPhone = true;
                 setMarinaState('LISTENING');
-                reactor.classList.add('phone-listening');
             };
 
             recognition.onresult = (event) => {
@@ -1162,21 +1167,21 @@
                     console.error('Speech recognition error:', event.error);
                     addLog('system', `Mic Error: ${event.error}`);
                 }
-                reactor.classList.remove('phone-listening');
-                isListeningOnPhone = false;
-                setMarinaState('ASLEEP');
             };
 
             recognition.onend = () => {
-                reactor.classList.remove('phone-listening');
                 isListeningOnPhone = false;
-                setMarinaState('ASLEEP');
+                
+                const isSpeakingOrThinking = (marinaState.textContent === 'PROCESSING...' || marinaState.textContent === 'SPEAKING');
+                if (!isSpeakingOrThinking) {
+                    setMarinaState('LISTENING');
+                }
 
                 if (isHandsfreeEnabled) {
                     setTimeout(() => {
                         // ONLY restart if handsfree is enabled, NOT already listening, and not in active speak/think states
-                        const isSpeakingOrThinking = (marinaState.textContent === 'PROCESSING...' || marinaState.textContent === 'SPEAKING');
-                        if (isHandsfreeEnabled && !isListeningOnPhone && !isSpeakingOrThinking) {
+                        const isSpeakingOrThinking2 = (marinaState.textContent === 'PROCESSING...' || marinaState.textContent === 'SPEAKING');
+                        if (isHandsfreeEnabled && !isListeningOnPhone && !isSpeakingOrThinking2) {
                             startSpeechRecognition(true);
                         }
                     }, 500);
