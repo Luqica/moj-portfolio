@@ -228,6 +228,40 @@
             box-shadow: 0 0 20px #00ffaa, inset 0 0 20px #00ffaa;
         }
 
+        .arc-reactor.state-idle .core {
+            background: radial-gradient(circle, #00d18b 0%, #005a3c 75%, transparent 100%);
+            box-shadow: 0 0 25px #00d18b, inset 0 0 15px #00d18b;
+            animation: idlePulse 3s infinite ease-in-out alternate;
+        }
+
+        .arc-reactor.state-idle .ring {
+            border-color: #00d18b;
+            box-shadow: 0 0 12px #00d18b, inset 0 0 12px #00d18b;
+        }
+
+        .arc-reactor.state-idle .outer-ring {
+            animation-duration: 25s;
+        }
+
+        .arc-reactor.state-idle .middle-ring {
+            animation-duration: 35s;
+        }
+
+        .arc-reactor.state-idle .inner-ring {
+            animation-duration: 20s;
+        }
+
+        @keyframes idlePulse {
+            from {
+                transform: scale(0.98);
+                opacity: 0.85;
+            }
+            to {
+                transform: scale(1.02);
+                opacity: 1;
+            }
+        }
+
         .arc-reactor.phone-listening .core {
             background: radial-gradient(circle, #ff0055 0%, #ff00aa 70%, transparent 100%);
             box-shadow: 0 0 40px #ff0055, inset 0 0 40px #ff0055;
@@ -908,7 +942,7 @@
             if (state === 'THINKING' || state === 'SPEAKING' || state === 'PROCESSING...') {
                 ignoreAudio = false;
             }
-            reactor.classList.remove('state-listening', 'state-thinking', 'state-speaking', 'phone-listening');
+            reactor.classList.remove('state-listening', 'state-thinking', 'state-speaking', 'phone-listening', 'state-idle');
             const coreEl = document.querySelector('.core');
 
             if (state === 'ASLEEP') {
@@ -927,8 +961,9 @@
                     reactor.classList.add('phone-listening');
                 } else {
                     marinaState.textContent = 'IDLE';
-                    marinaState.style.color = 'var(--text-dim)';
-                    marinaState.style.textShadow = 'none';
+                    marinaState.style.color = '#00d18b';
+                    marinaState.style.textShadow = '0 0 10px #00d18b';
+                    reactor.classList.add('state-idle');
                 }
                 if (coreEl) {
                     coreEl.textContent = '';
