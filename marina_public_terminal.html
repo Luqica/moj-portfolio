@@ -880,6 +880,7 @@
         let activeAudioSource = null;
         let latestCoords = null;
         let hasLoggedDisconnect = false;
+        let ignoreAudio = false;
 
         // Clock update
         function updateClock() {
@@ -904,6 +905,9 @@
 
         // UI Modifiers
         function setMarinaState(state) {
+            if (state === 'THINKING' || state === 'SPEAKING' || state === 'PROCESSING...') {
+                ignoreAudio = false;
+            }
             reactor.classList.remove('state-listening', 'state-thinking', 'state-speaking');
             const coreEl = document.querySelector('.core');
 
@@ -1002,7 +1006,7 @@
         }
 
         function playAudioData(base64Data) {
-            if (!isVoiceEnabled) return;
+            if (!isVoiceEnabled || ignoreAudio) return;
             
             // Push chunk into queue
             audioQueue.push(base64Data);
@@ -1210,6 +1214,7 @@
         reactor.addEventListener('click', () => {
             const isSpeaking = reactor.classList.contains('state-speaking') || (marinaState.textContent === 'SPEAKING');
             if (isSpeaking) {
+                ignoreAudio = true;
                 stopAllAudio();
                 if (ws && ws.readyState === WebSocket.OPEN) {
                     ws.send(JSON.stringify({
