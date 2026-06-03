@@ -1208,7 +1208,16 @@
         }
 
         reactor.addEventListener('click', () => {
-            if (isListeningOnPhone) {
+            const isSpeaking = reactor.classList.contains('state-speaking') || (marinaState.textContent === 'SPEAKING');
+            if (isSpeaking) {
+                stopAllAudio();
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({
+                        type: 'abort'
+                    }));
+                }
+                startSpeechRecognition();
+            } else if (isListeningOnPhone) {
                 stopSpeechRecognition();
             } else {
                 startSpeechRecognition();
