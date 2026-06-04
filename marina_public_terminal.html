@@ -1272,6 +1272,15 @@
             }
         });
 
+        // Global click/touch listener to unlock AudioContext on first interaction
+        const unlockHandler = () => {
+            unlockPhoneAudio();
+            document.removeEventListener('click', unlockHandler);
+            document.removeEventListener('touchstart', unlockHandler);
+        };
+        document.addEventListener('click', unlockHandler);
+        document.addEventListener('touchstart', unlockHandler);
+
         // Terminal Typed Input fallback
         const terminalInput = document.getElementById('terminal-input');
         if (terminalInput) {
@@ -1381,6 +1390,10 @@
                 wsStatus.className = 'ws-connected';
                 addLog('system', 'WebSocket connection established with MARINA Core.');
                 hasLoggedDisconnect = false;
+                
+                // Automatically start speech recognition to activate mic & unlock AudioContext
+                startSpeechRecognition(true);
+                
                 if (latestCoords && ws && ws.readyState === WebSocket.OPEN) {
                     ws.send(JSON.stringify({
                         type: 'location',
