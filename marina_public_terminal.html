@@ -983,21 +983,11 @@
                     coreEl.textContent = '';
                     coreEl.style.fontSize = '3.5rem';
                 }
-                
-                // Suspend mic immediately during thinking
-                if (recognition && isListeningOnPhone) {
-                    recognition.abort();
-                }
             } else if (state === 'SPEAKING') {
                 marinaState.textContent = 'SPEAKING';
                 marinaState.style.color = '#00ffaa';
                 marinaState.style.textShadow = '0 0 10px #00ffaa';
                 reactor.classList.add('state-speaking');
-                
-                // Suspend mic immediately during speaking
-                if (recognition && isListeningOnPhone) {
-                    recognition.abort();
-                }
             }
         }
 
@@ -1105,11 +1095,8 @@
                 audioPlayTimeout = null;
             }
 
-            // Immediately send playing state and abort mic listening
+            // Immediately send playing state
             sendAudioState('playing');
-            if (recognition && isListeningOnPhone) {
-                recognition.abort();
-            }
 
             try {
                 const binaryString = window.atob(base64Data);
@@ -1189,6 +1176,13 @@
             };
 
             recognition.onresult = (event) => {
+                // Ignore speech recognition results if MARINA is speaking or thinking
+                const isSpeakingOrThinking = (marinaState.textContent === 'PROCESSING...' || marinaState.textContent === 'SPEAKING');
+                if (isSpeakingOrThinking) {
+                    console.log("Ignoring speech result during speaking/thinking:", event.results[0][0].transcript);
+                    return;
+                }
+
                 const text = event.results[0][0].transcript;
                 if (!text) return;
 
