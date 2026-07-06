@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJ Luqica - Electronic Music & Gigs</title>
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom DJ Style Sheet -->
+    <link rel="stylesheet" href="dj_style.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="dj-nav">
+        <div class="dj-logo">
+            <i class="fa-solid fa-compact-disc"></i> DJ LUQICA
+        </div>
+        <a href="index.html" class="back-btn">
+            <i class="fa-solid fa-house"></i> Main Portfolio
+        </a>
+    </nav>
+
+    <!-- Main Hero -->
+    <main class="hero-dj">
+        <div class="visual-hub">
+            <!-- Vinyl & Equalizer Visual Unit -->
+            <div class="vinyl-wrap">
+                <!-- Radial Equalizer generated here -->
+                <div class="eq-container" id="eq-container"></div>
+                <!-- Spin Vinyl record -->
+                <div class="vinyl-disc">
+                    <div class="vinyl-center"></div>
+                </div>
+            </div>
+
+            <!-- Header Titles -->
+            <div>
+                <h1 class="dj-title">DJ LUQICA</h1>
+                <h2 class="dj-subtitle">Electronic Music & Club DJ</h2>
+            </div>
+
+            <!-- Information Card -->
+            <div class="dj-card">
+                <ul class="contact-info-list">
+                    <li>
+                        <i class="fa-solid fa-phone"></i>
+                        <a href="tel:+385991234567">+385 99 123 4567</a>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-envelope"></i>
+                        <a href="mailto:kolareklukabusiness@gmail.com">kolareklukabusiness@gmail.com</a>
+                    </li>
+                </ul>
+
+                <!-- Booking CTA -->
+                <button class="dj-btn" id="btn-book-now">
+                    <i class="fa-solid fa-calendar-check"></i> Book Now
+                </button>
+
+                <!-- Equalizer decoration -->
+                <div class="dj-eq-footer">
+                    <div class="eq-bar-static"></div>
+                    <div class="eq-bar-static"></div>
+                    <div class="eq-bar-static"></div>
+                    <div class="eq-bar-static"></div>
+                    <div class="eq-bar-static"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Booking Modal -->
+    <div class="modal-overlay" id="booking-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">BOOK DJ LUQICA</h3>
+                <button class="close-btn" id="btn-close-modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <form id="booking-form">
+                <div class="form-group">
+                    <label for="booking-email">Your Email Address</label>
+                    <input type="email" id="booking-email" class="form-input" placeholder="name@example.com" required autocomplete="off">
+                </div>
+                
+                <div class="form-group">
+                    <label for="booking-message">Subject / Short Message</label>
+                    <textarea id="booking-message" class="form-input" placeholder="Introduce yourself, gig date, details..." required></textarea>
+                </div>
+
+                <button type="submit" class="modal-btn-submit">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Request
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script src="dj_script.js"></script>
+</body>
+
+</html>

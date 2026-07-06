@@ -278,6 +278,10 @@ body {
     z-index: 2;
     filter: grayscale(20%) contrast(110%);
     transition: filter 0.5s ease;
+    
+    /* Feathered edges to blend smoothly with the background and glow-ring */
+    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%);
+    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%);
 }
 
 .profile-picture:hover {

@@ -1,0 +1,582 @@
+/* --- DJ LUQICA SITE STYLE --- */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Rajdhani:wght@500;600;700;900&family=Share+Tech+Mono&family=Titillium+Web:wght@300;400;600&display=swap');
+
+:root {
+    --bg-dark: #080512;
+    --bg-darker: #04020a;
+    --text-primary: #f0e6ff;
+    --text-secondary: #a39bb8;
+
+    /* Neon Colors */
+    --neon-pink: #ff007f;
+    --neon-pink-glow: rgba(255, 0, 127, 0.4);
+    --neon-cyan: #00f3ff;
+    --neon-cyan-glow: rgba(0, 243, 255, 0.4);
+    --neon-purple: #9d00ff;
+    --neon-purple-glow: rgba(157, 0, 255, 0.4);
+
+    /* Glassmorphism */
+    --glass-bg: rgba(13, 8, 26, 0.85);
+    --glass-border: rgba(255, 0, 127, 0.15);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7);
+
+    /* Fonts */
+    --font-main: 'Titillium Web', sans-serif;
+    --font-heading: 'Rajdhani', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+}
+
+/* --- RESET & BODY --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    overflow-x: hidden;
+    line-height: 1.6;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(157, 0, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(255, 0, 127, 0.05) 0%, transparent 60%);
+    background-attachment: fixed;
+}
+
+/* --- SCROLLBAR --- */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-darker);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--neon-pink-glow);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--neon-pink);
+    box-shadow: 0 0 10px var(--neon-pink-glow);
+}
+
+/* --- NAVIGATION --- */
+.dj-nav {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1000px;
+    padding: 15px 30px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    z-index: 1000;
+    box-shadow: var(--glass-shadow);
+    transition: all 0.3s ease;
+}
+
+.dj-nav:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.15);
+}
+
+.dj-logo {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: #fff;
+    text-shadow: 0 0 10px var(--neon-pink-glow);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dj-logo i {
+    color: var(--neon-pink);
+    animation: pulseGlow 2s infinite alternate;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    padding: 6px 15px;
+    border-radius: 4px;
+}
+
+.back-btn:hover {
+    color: var(--neon-cyan);
+    border-color: var(--neon-cyan);
+    background: rgba(0, 243, 255, 0.05);
+    text-shadow: 0 0 8px var(--neon-cyan-glow);
+    box-shadow: 0 0 12px rgba(0, 243, 255, 0.1);
+}
+
+/* --- HERO SECTION --- */
+.hero-dj {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 120px 20px 40px 20px;
+    position: relative;
+}
+
+.visual-hub {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    text-align: center;
+    z-index: 10;
+}
+
+.vinyl-wrap {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vinyl-disc {
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, #222 10%, #111 35%, #050505 50%, #151515 70%, #000 100%);
+    border-radius: 50%;
+    box-shadow:
+        0 0 30px rgba(0, 0, 0, 0.8),
+        0 0 15px var(--neon-pink-glow),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+    position: relative;
+    animation: spinRecord 12s linear infinite;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Vinyl Grooves Effect */
+.vinyl-disc::before {
+    content: '';
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    right: 5%;
+    bottom: 5%;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    box-shadow:
+        inset 0 0 10px rgba(0, 0, 0, 0.5),
+        0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.vinyl-center {
+    position: absolute;
+    top: 35%;
+    left: 35%;
+    width: 30%;
+    height: 30%;
+    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+}
+
+.vinyl-center::after {
+    content: '';
+    width: 20%;
+    height: 20%;
+    background: var(--bg-dark);
+    border-radius: 50%;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+/* Equalizer overlay around vinyl */
+.eq-container {
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.eq-bar {
+    position: absolute;
+    width: 3px;
+    height: 30px;
+    background: linear-gradient(to top, var(--neon-cyan), var(--neon-pink));
+    bottom: 50%;
+    transform-origin: bottom center;
+    border-radius: 3px;
+    opacity: 0.7;
+}
+
+/* Main Titles */
+.dj-title {
+    font-family: var(--font-heading);
+    font-size: clamp(3.5rem, 9vw, 6.5rem);
+    font-weight: 900;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 5px;
+    background: linear-gradient(180deg, #fff 40%, var(--neon-cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+}
+
+.dj-subtitle {
+    font-family: var(--font-mono);
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--neon-pink);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px var(--neon-pink-glow);
+}
+
+/* Booking & Contacts Card */
+.dj-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    margin-top: 20px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dj-card:hover {
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 30px rgba(255, 0, 127, 0.15);
+}
+
+.contact-info-list {
+    list-style: none;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-info-list li {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.15rem;
+    color: var(--text-primary);
+}
+
+.contact-info-list li a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    transition: color 0.3s;
+}
+
+.contact-info-list li a:hover {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 8px var(--neon-cyan-glow);
+}
+
+.contact-info-list li i {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--neon-pink);
+    box-shadow: inset 0 0 10px rgba(255, 0, 127, 0.05);
+}
+
+/* DJ BUTTONS */
+.dj-btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 30px;
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px var(--neon-pink-glow);
+}
+
+.dj-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(255, 0, 127, 0.6);
+    background: linear-gradient(135deg, #ff1a8c, #a81aff);
+}
+
+.dj-btn:active {
+    transform: translateY(1px);
+}
+
+/* --- BOOKING MODAL --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(4, 2, 10, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--neon-cyan);
+    border-radius: 12px;
+    padding: 40px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 0 40px rgba(0, 243, 255, 0.25), inset 0 0 15px rgba(0, 243, 255, 0.05);
+    transform: translateY(30px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.active .modal-card {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 243, 255, 0.15);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.modal-title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--neon-cyan-glow);
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+    color: var(--neon-pink);
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--neon-cyan);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.form-input {
+    background: rgba(4, 2, 10, 0.7);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 12px 15px;
+    color: #fff;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+}
+
+textarea.form-input {
+    resize: none;
+    height: 120px;
+}
+
+.modal-btn-submit {
+    width: 100%;
+    padding: 14px 20px;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #080512;
+    background: var(--neon-cyan);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+}
+
+.modal-btn-submit:hover {
+    background: #5cf5ff;
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
+    transform: translateY(-1px);
+}
+
+/* Equalizer visual animation footer on booking card */
+.dj-eq-footer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 4px;
+    height: 30px;
+    margin-top: 30px;
+}
+
+.eq-bar-static {
+    width: 4px;
+    background-color: var(--neon-pink);
+    border-radius: 2px;
+    animation: danceEq 1.5s ease-in-out infinite alternate;
+}
+
+/* Animations mapping */
+.eq-bar-static:nth-child(2) {
+    background-color: var(--neon-purple);
+    animation-delay: 0.2s;
+    animation-duration: 1.2s;
+}
+
+.eq-bar-static:nth-child(3) {
+    background-color: var(--neon-cyan);
+    animation-delay: 0.4s;
+    animation-duration: 1.8s;
+}
+
+.eq-bar-static:nth-child(4) {
+    background-color: var(--neon-pink);
+    animation-delay: 0.1s;
+    animation-duration: 1.4s;
+}
+
+.eq-bar-static:nth-child(5) {
+    background-color: var(--neon-cyan);
+    animation-delay: 0.3s;
+    animation-duration: 1.6s;
+}
+
+/* --- ANIMATIONS KEYFRAMES --- */
+@keyframes spinRecord {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulseGlow {
+    from {
+        text-shadow: 0 0 5px var(--neon-pink-glow);
+    }
+
+    to {
+        text-shadow: 0 0 15px rgba(255, 0, 127, 0.8), 0 0 25px rgba(255, 0, 127, 0.5);
+    }
+}
+
+@keyframes danceEq {
+    0% {
+        height: 5px;
+    }
+
+    100% {
+        height: 28px;
+    }
+}
+
+/* Responsive constraints */
+@media (max-width: 768px) {
+    .dj-nav {
+        padding: 12px 20px;
+    }
+
+    .dj-card {
+        padding: 25px;
+    }
+
+    .vinyl-wrap {
+        width: 200px;
+        height: 200px;
+    }
+
+    .eq-container {
+        width: 250px;
+        height: 250px;
+    }
+}
