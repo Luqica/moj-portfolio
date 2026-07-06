@@ -58,10 +58,27 @@ function initBookingModal() {
     const btnCloseModal = document.getElementById('btn-close-modal');
     const bookingForm = document.getElementById('booking-form');
 
+    // Container references
+    const formContainer = document.getElementById('booking-form-container');
+    const successContainer = document.getElementById('booking-success-container');
+    const errorMsg = document.getElementById('booking-error-msg');
+    const btnSuccessClose = document.getElementById('btn-success-close');
+    const modalTitle = document.getElementById('booking-modal-title');
+
     if (!btnBookNow || !modalOverlay || !btnCloseModal || !bookingForm) return;
+
+    // Reset Modal Content to original Form view
+    function resetModal() {
+        bookingForm.reset();
+        if (formContainer) formContainer.style.display = 'block';
+        if (successContainer) successContainer.style.display = 'none';
+        if (errorMsg) errorMsg.style.display = 'none';
+        if (modalTitle) modalTitle.style.display = 'block';
+    }
 
     // Open Modal
     btnBookNow.addEventListener('click', () => {
+        resetModal();
         modalOverlay.classList.add('active');
         document.body.style.overflow = 'hidden'; // lock scrolling
     });
@@ -71,6 +88,14 @@ function initBookingModal() {
         modalOverlay.classList.remove('active');
         document.body.style.overflow = 'auto'; // restore scrolling
     });
+
+    // Close Modal via Success screen close button
+    if (btnSuccessClose) {
+        btnSuccessClose.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+    }
 
     // Close Modal when clicking outside the modal-card
     modalOverlay.addEventListener('click', (e) => {
@@ -89,7 +114,6 @@ function initBookingModal() {
         const submitBtn = bookingForm.querySelector('.modal-btn-submit');
 
         if (!senderEmail || !shortMessage) {
-            alert('Please fill out all fields.');
             return;
         }
 
@@ -97,6 +121,7 @@ function initBookingModal() {
         submitBtn.disabled = true;
         const originalBtnContent = submitBtn.innerHTML;
         submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+        if (errorMsg) errorMsg.style.display = 'none';
 
         const recipient = 'kolareklukabusiness@gmail.com';
 
@@ -120,16 +145,14 @@ function initBookingModal() {
             throw new Error('Network error on form submission');
         })
         .then(data => {
-            alert('Booking request sent successfully! Note: Since this is the first submission, FormSubmit will send a confirmation/activation email to ' + recipient + '. Make sure to click the link inside that email to activate background forwarding.');
-            
-            // Reset form and close modal
-            bookingForm.reset();
-            modalOverlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
+            // Smoothly switch views inside the modal
+            if (formContainer) formContainer.style.display = 'none';
+            if (modalTitle) modalTitle.style.display = 'none';
+            if (successContainer) successContainer.style.display = 'block';
         })
         .catch(err => {
             console.error('Error submitting form:', err);
-            alert('Could not send booking request. Please try again or contact directly via: ' + recipient);
+            if (errorMsg) errorMsg.style.display = 'block';
         })
         .finally(() => {
             // Restore button state
