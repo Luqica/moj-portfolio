@@ -261,6 +261,9 @@ body {
 /* Equalizer overlay around vinyl */
 .eq-container {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 320px;
     height: 320px;
     display: flex;
@@ -625,11 +628,13 @@ textarea.form-input {
 /* Responsive constraints */
 @media (max-width: 768px) {
     .dj-nav {
-        flex-direction: column;
-        gap: 12px;
-        padding: 12px 15px;
+        justify-content: center;
+        padding: 12px 24px;
         width: 95%;
-        align-items: center;
+    }
+    
+    .back-btn {
+        display: none !important;
     }
     
     .dj-title {

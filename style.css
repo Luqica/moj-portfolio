@@ -538,11 +538,9 @@ body {
 
 @media (max-width: 768px) {
     .tech-nav {
-        flex-direction: column;
-        gap: 12px;
-        padding: 12px 15px;
+        justify-content: center;
+        padding: 12px 24px;
         width: 95%;
-        align-items: center;
     }
     
     .mobile-menu-btn {
@@ -550,24 +548,7 @@ body {
     }
     
     .nav-links {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 8px 15px;
-        width: 100%;
-        position: static !important;
-        background: transparent !important;
-        border: none !important;
-        padding: 0 !important;
-        box-shadow: none !important;
-        transform: none !important;
-        opacity: 1 !important;
-    }
-
-    .nav-links a {
-        font-size: 0.8rem;
-        letter-spacing: 0.5px;
+        display: none !important;
     }
 
     .layout-split {
