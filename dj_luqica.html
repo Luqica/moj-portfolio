@@ -17,8 +17,9 @@
 
     <!-- Navigation -->
     <nav class="dj-nav">
-        <div class="dj-logo">
-            <i class="fa-solid fa-compact-disc"></i> DJ LUQICA
+        <div class="logo-wrapper">
+            <span class="logo-dj">DJ</span>
+            <span class="logo-name">LUQICA</span>
         </div>
         <a href="index.html" class="back-btn">
             <i class="fa-solid fa-house"></i> Main Portfolio
@@ -28,13 +29,18 @@
     <!-- Main Hero -->
     <main class="hero-dj">
         <div class="visual-hub">
-            <!-- Vinyl & Equalizer Visual Unit -->
-            <div class="vinyl-wrap">
+            <!-- DJ Jog Platter visual unit -->
+            <div class="deck-wrap">
                 <!-- Radial Equalizer generated here -->
                 <div class="eq-container" id="eq-container"></div>
-                <!-- Spin Vinyl record -->
-                <div class="vinyl-disc">
-                    <div class="vinyl-center"></div>
+                <!-- High-tech Jog Wheel Platter -->
+                <div class="jog-wheel">
+                    <div class="jog-outer-ring"></div>
+                    <div class="jog-display">
+                        <div class="jog-bpm">126.0</div>
+                        <div class="jog-label">BPM</div>
+                        <div class="jog-status"><i class="fa-solid fa-play"></i> DECK 1</div>
+                    </div>
                 </div>
             </div>
 
@@ -44,13 +50,36 @@
                 <h2 class="dj-subtitle">Electronic Music & Club DJ</h2>
             </div>
 
+            <!-- Live Set Video Player -->
+            <div class="dj-card" style="padding: 20px; max-width: 600px; width: 100%;">
+                <div class="video-header" style="font-family: var(--font-mono); color: var(--ferrari-red); font-size: 0.95rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; justify-content: center; text-shadow: 0 0 5px var(--ferrari-red-glow);">
+                    <i class="fa-brands fa-youtube"></i> LIVE DJ SET
+                </div>
+                <div class="video-container-wrapper" style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);">
+                    <iframe src="https://www.youtube.com/embed/kg5khz00-NY?start=12&autoplay=1" 
+                            title="DJ Luqica Live Set"
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- SoundCloud DJ Set Player -->
+            <div class="dj-card" style="padding: 20px; max-width: 600px; width: 100%;">
+                <div class="soundcloud-header" style="font-family: var(--font-mono); color: var(--ferrari-red); font-size: 0.95rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; justify-content: center; text-shadow: 0 0 5px var(--ferrari-red-glow);">
+                    <i class="fa-brands fa-soundcloud"></i> ENTER ZAGREB DEBUT SET
+                </div>
+                <div class="soundcloud-container" style="border-radius: 4px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05);">
+                    <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" 
+                            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/luka-kolarek-592993278/bring-back-the-summer-dj-set-enter-zagreb-debut&color=%23000000&inverse=true&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false">
+                    </iframe>
+                </div>
+            </div>
+
             <!-- Information Card -->
             <div class="dj-card">
                 <ul class="contact-info-list">
-                    <li>
-                        <i class="fa-solid fa-phone"></i>
-                        <a href="tel:+385991234567">+385 99 123 4567</a>
-                    </li>
                     <li>
                         <i class="fa-solid fa-envelope"></i>
                         <a href="mailto:kolareklukabusiness@gmail.com">kolareklukabusiness@gmail.com</a>
@@ -78,27 +107,43 @@
     <div class="modal-overlay" id="booking-modal">
         <div class="modal-card">
             <div class="modal-header">
-                <h3 class="modal-title">BOOK DJ LUQICA</h3>
+                <h3 class="modal-title" id="booking-modal-title">BOOK DJ LUQICA</h3>
                 <button class="close-btn" id="btn-close-modal">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            
-            <form id="booking-form">
-                <div class="form-group">
-                    <label for="booking-email">Your Email Address</label>
-                    <input type="email" id="booking-email" class="form-input" placeholder="name@example.com" required autocomplete="off">
-                </div>
-                
-                <div class="form-group">
-                    <label for="booking-message">Subject / Short Message</label>
-                    <textarea id="booking-message" class="form-input" placeholder="Introduce yourself, gig date, details..." required></textarea>
-                </div>
 
-                <button type="submit" class="modal-btn-submit">
-                    <i class="fa-solid fa-paper-plane"></i> Submit Request
-                </button>
-            </form>
+            <!-- Form Container -->
+            <div id="booking-form-container">
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label for="booking-email">Your Email Address</label>
+                        <input type="email" id="booking-email" class="form-input" placeholder="name@example.com" required
+                            autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="booking-message">Subject / Short Message</label>
+                        <textarea id="booking-message" class="form-input"
+                            placeholder="Introduce yourself, gig date, details..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="modal-btn-submit">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Request
+                    </button>
+                </form>
+                <div id="booking-error-msg" style="color: var(--neon-pink); display: none; font-size: 0.95rem; margin-top: 15px; text-align: center; font-family: var(--font-mono); text-shadow: 0 0 5px rgba(255, 0, 127, 0.3);">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Sending failed. Please try again.
+                </div>
+            </div>
+
+            <!-- Success Container -->
+            <div id="booking-success-container" style="display: none; text-align: center; padding: 10px 0;">
+                <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: var(--neon-cyan); margin-bottom: 20px; filter: drop-shadow(0 0 8px var(--neon-cyan-glow));"></i>
+                <h4 style="font-size: 1.6rem; margin-bottom: 10px; font-family: var(--font-heading); letter-spacing: 2px; text-transform: uppercase;">MESSAGE SENT</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 25px; font-size: 1.05rem;">Your booking request was successfully sent! DJ Luqica will review it and get back to you shortly.</p>
+                <button class="dj-btn" id="btn-success-close" style="max-width: 220px; font-size: 1.1rem; padding: 12px 24px;">Close</button>
+            </div>
         </div>
     </div>
 
