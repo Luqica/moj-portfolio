@@ -11,9 +11,13 @@ function initEqualizerRing() {
     if (!eqContainer) return;
 
     const numBars = 45;
-    const radius = 135; // slightly larger than vinyl radius (130px)
-    const centerX = 160;
-    const centerY = 160;
+    
+    // Dynamically query container sizes for responsive alignment on all devices
+    const width = eqContainer.clientWidth || 320;
+    const height = eqContainer.clientHeight || 320;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const radius = centerX * 0.85;
 
     const bars = [];
 
@@ -22,7 +26,7 @@ function initEqualizerRing() {
         const bar = document.createElement('div');
         bar.className = 'eq-bar';
 
-        // Position bar radially around the vinyl record
+        // Position bar radially around the jog platter center
         const x = centerX + radius * Math.cos(angle);
         const y = centerY + radius * Math.sin(angle);
 
