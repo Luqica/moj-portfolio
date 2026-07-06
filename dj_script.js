@@ -11,32 +11,15 @@ function initEqualizerRing() {
     if (!eqContainer) return;
 
     const numBars = 45;
-    
-    // Dynamically query container sizes for responsive alignment on all devices
-    const width = eqContainer.clientWidth || 320;
-    const height = eqContainer.clientHeight || 320;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = centerX * 0.85;
-
     const bars = [];
 
     for (let i = 0; i < numBars; i++) {
-        const angle = (i / numBars) * 2 * Math.PI;
+        const angle = (i / numBars) * 360; // Set angle in degrees directly
         const bar = document.createElement('div');
         bar.className = 'eq-bar';
 
-        // Position bar radially around the jog platter center
-        const x = centerX + radius * Math.cos(angle);
-        const y = centerY + radius * Math.sin(angle);
-
-        bar.style.left = `${x}px`;
-        bar.style.top = `${y}px`;
-
-        // Rotate the bar so it points outwards
-        // We add 90 degrees (PI/2) because default divs are upright and transform-origin is bottom center
-        const rotateAngle = angle * (180 / Math.PI) + 90;
-        bar.style.transform = `translate(-50%, -100%) rotate(${rotateAngle}deg)`;
+        // Delegate radial positioning and rotation to CSS using variables
+        bar.style.setProperty('--angle', `${angle}deg`);
         
         eqContainer.appendChild(bar);
         bars.push(bar);

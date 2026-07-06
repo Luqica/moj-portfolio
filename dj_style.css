@@ -271,17 +271,22 @@ body {
     align-items: center;
     pointer-events: none;
     z-index: 1;
+    --eq-radius: 135px; /* Default desktop radius */
 }
 
 .eq-bar {
     position: absolute;
+    left: 50%;
+    top: 50%;
     width: 3px;
     height: 30px;
     background: linear-gradient(to top, var(--silver-chrome), var(--ferrari-red));
-    bottom: 50%;
     transform-origin: bottom center;
     border-radius: 3px;
     opacity: 0.7;
+    /* Center the bar bottom on eq-container center, rotate it, and translate outwards */
+    transform: translate(-50%, -100%) rotate(var(--angle, 0deg)) translateY(calc(-1 * var(--eq-radius)));
+    transition: height 0.1s ease;
 }
 
 /* Main Titles */
@@ -651,6 +656,7 @@ textarea.form-input {
     .eq-container {
         width: 240px;
         height: 240px;
+        --eq-radius: 105px; /* Mobile radius matching 200px deck-wrap */
     }
 
     .jog-bpm {
