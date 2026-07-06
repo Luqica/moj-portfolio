@@ -532,14 +532,59 @@ body {
 
 
 /* --- MOBILE RESPONSIVENESS --- */
+.mobile-menu-btn {
+    display: none;
+}
+
 @media (max-width: 768px) {
-    .glass-nav {
-        padding: 15px 20px;
+    .tech-nav {
+        padding: 12px 24px;
         width: 95%;
     }
     
+    .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+        font-size: 1.4rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-menu-btn:hover {
+        color: var(--accent-blue);
+        text-shadow: 0 0 8px var(--accent-blue-glow);
+    }
+    
     .nav-links {
-        display: none; /* Can implement hamburger menu later if desired */
+        display: none;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 4px;
+        padding: 20px;
+        gap: 15px;
+        box-shadow: var(--glass-shadow);
+        align-items: center;
+        z-index: 1000;
+        transform: translateY(-10px);
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .nav-links.active {
+        display: flex;
+        transform: translateY(0);
+        opacity: 1;
     }
 
     .layout-split {
