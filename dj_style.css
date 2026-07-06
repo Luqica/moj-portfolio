@@ -1,29 +1,28 @@
-/* --- DJ LUQICA SITE STYLE --- */
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Rajdhani:wght@500;600;700;900&family=Share+Tech+Mono&family=Titillium+Web:wght@300;400;600&display=swap');
+/* --- DJ LUQICA FERRARI & JAMES HYPE THEME --- */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700;900&family=Share+Tech+Mono&family=Titillium+Web:wght@300;400;600;700&display=swap');
 
 :root {
-    --bg-dark: #080512;
-    --bg-darker: #04020a;
-    --text-primary: #f0e6ff;
-    --text-secondary: #a39bb8;
-
-    /* Neon Colors */
-    --neon-pink: #ff007f;
-    --neon-pink-glow: rgba(255, 0, 127, 0.4);
-    --neon-cyan: #00f3ff;
-    --neon-cyan-glow: rgba(0, 243, 255, 0.4);
-    --neon-purple: #9d00ff;
-    --neon-purple-glow: rgba(157, 0, 255, 0.4);
-
-    /* Glassmorphism */
-    --glass-bg: rgba(13, 8, 26, 0.85);
-    --glass-border: rgba(255, 0, 127, 0.15);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7);
-
+    --bg-dark: #050507;
+    --bg-darker: #000000;
+    --text-primary: #ffffff;
+    --text-secondary: #8e8e93;
+    
+    /* Ferrari Theme Colors */
+    --ferrari-red: #d1121d;
+    --ferrari-red-glow: rgba(209, 18, 29, 0.4);
+    --ferrari-red-dim: rgba(209, 18, 29, 0.15);
+    
+    /* Carbon & Chrome Metallic accents */
+    --carbon-gray: #121215;
+    --carbon-border: rgba(255, 255, 255, 0.08);
+    --silver-chrome: #f2f2f7;
+    --silver-chrome-dim: rgba(242, 242, 247, 0.4);
+    
     /* Fonts */
     --font-main: 'Titillium Web', sans-serif;
     --font-heading: 'Rajdhani', sans-serif;
     --font-mono: 'Share Tech Mono', monospace;
+    --font-dj: 'Orbitron', sans-serif;
 }
 
 /* --- RESET & BODY --- */
@@ -40,10 +39,10 @@ body {
     font-family: var(--font-main);
     overflow-x: hidden;
     line-height: 1.6;
-    background-image:
-        radial-gradient(circle at 10% 20%, rgba(157, 0, 255, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(255, 0, 127, 0.05) 0%, transparent 60%);
+    background-image: 
+        linear-gradient(rgba(209, 18, 29, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(209, 18, 29, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
     background-attachment: fixed;
 }
 
@@ -57,13 +56,13 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--neon-pink-glow);
+    background: var(--ferrari-red-glow);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--neon-pink);
-    box-shadow: 0 0 10px var(--neon-pink-glow);
+    background: var(--ferrari-red);
+    box-shadow: 0 0 10px var(--ferrari-red-glow);
 }
 
 /* --- NAVIGATION --- */
@@ -78,36 +77,54 @@ body {
     width: 90%;
     max-width: 1000px;
     padding: 15px 30px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    border-radius: 8px;
+    background: rgba(18, 18, 21, 0.9);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--carbon-border);
+    border-radius: 6px;
     z-index: 1000;
-    box-shadow: var(--glass-shadow);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
     transition: all 0.3s ease;
 }
 
 .dj-nav:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 25px rgba(0, 243, 255, 0.15);
+    border-color: var(--ferrari-red);
+    box-shadow: 0 0 25px rgba(209, 18, 29, 0.15);
 }
 
-.dj-logo {
-    font-family: var(--font-heading);
-    font-weight: 900;
-    font-size: 1.6rem;
-    letter-spacing: 3px;
-    color: #fff;
-    text-shadow: 0 0 10px var(--neon-pink-glow);
+/* TYPOGRAPHIC LOGO DESIGN (DJ LUQICA) */
+.logo-wrapper {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
-.dj-logo i {
-    color: var(--neon-pink);
-    animation: pulseGlow 2s infinite alternate;
+.logo-dj {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    background: var(--ferrari-red);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: 0 0 8px var(--ferrari-red-glow);
+}
+
+.logo-name {
+    font-family: var(--font-dj);
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    color: #fff;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+}
+
+.logo-accent {
+    color: var(--ferrari-red);
+    text-shadow: 0 0 10px var(--ferrari-red-glow);
 }
 
 .back-btn {
@@ -126,11 +143,11 @@ body {
 }
 
 .back-btn:hover {
-    color: var(--neon-cyan);
-    border-color: var(--neon-cyan);
-    background: rgba(0, 243, 255, 0.05);
-    text-shadow: 0 0 8px var(--neon-cyan-glow);
-    box-shadow: 0 0 12px rgba(0, 243, 255, 0.1);
+    color: var(--ferrari-red);
+    border-color: var(--ferrari-red);
+    background: rgba(209, 18, 29, 0.05);
+    text-shadow: 0 0 8px var(--ferrari-red-glow);
+    box-shadow: 0 0 12px rgba(209, 18, 29, 0.1);
 }
 
 /* --- HERO SECTION --- */
@@ -153,7 +170,7 @@ body {
     z-index: 10;
 }
 
-.vinyl-wrap {
+.deck-wrap {
     position: relative;
     width: 260px;
     height: 260px;
@@ -162,56 +179,83 @@ body {
     align-items: center;
 }
 
-.vinyl-disc {
+.jog-wheel {
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, #222 10%, #111 35%, #050505 50%, #151515 70%, #000 100%);
+    background: radial-gradient(circle, #2a2a30 0%, #151518 40%, #08080a 70%, #020203 100%);
     border-radius: 50%;
-    box-shadow:
-        0 0 30px rgba(0, 0, 0, 0.8),
-        0 0 15px var(--neon-pink-glow),
-        inset 0 0 20px rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.9),
+        0 0 20px var(--ferrari-red-glow),
+        inset 0 0 15px rgba(255, 255, 255, 0.05);
     position: relative;
-    animation: spinRecord 12s linear infinite;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Vinyl Grooves Effect */
-.vinyl-disc::before {
-    content: '';
-    position: absolute;
-    top: 5%;
-    left: 5%;
-    right: 5%;
-    bottom: 5%;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    box-shadow:
-        inset 0 0 10px rgba(0, 0, 0, 0.5),
-        0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-.vinyl-center {
-    position: absolute;
-    top: 35%;
-    left: 35%;
-    width: 30%;
-    height: 30%;
-    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
-    border-radius: 50%;
+    border: 4px solid #1c1c1f;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
 }
 
-.vinyl-center::after {
-    content: '';
-    width: 20%;
-    height: 20%;
-    background: var(--bg-dark);
+/* Outer ring platter ticks animation (techy rotation) */
+.jog-outer-ring {
+    position: absolute;
+    top: 6%; left: 6%; right: 6%; bottom: 6%;
     border-radius: 50%;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.8);
+    border: 3px dashed rgba(209, 18, 29, 0.5);
+    animation: spinRecord 15s linear infinite;
+    box-shadow: 0 0 10px rgba(209, 18, 29, 0.15);
+}
+
+/* Center LCD display screen */
+.jog-display {
+    position: absolute;
+    width: 48%;
+    height: 48%;
+    background: #020204;
+    border-radius: 50%;
+    border: 2px solid #1c1c1f;
+    box-shadow: 
+        inset 0 0 12px rgba(0, 0, 0, 0.9),
+        0 0 10px rgba(209, 18, 29, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    font-family: var(--font-mono);
+}
+
+.jog-bpm {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.jog-label {
+    font-size: 0.65rem;
+    color: var(--ferrari-red);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+.jog-status {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-transform: uppercase;
+}
+
+.jog-status i {
+    color: var(--ferrari-red);
+    font-size: 0.6rem;
 }
 
 /* Equalizer overlay around vinyl */
@@ -230,7 +274,7 @@ body {
     position: absolute;
     width: 3px;
     height: 30px;
-    background: linear-gradient(to top, var(--neon-cyan), var(--neon-pink));
+    background: linear-gradient(to top, var(--silver-chrome), var(--ferrari-red));
     bottom: 50%;
     transform-origin: bottom center;
     border-radius: 3px;
@@ -239,48 +283,57 @@ body {
 
 /* Main Titles */
 .dj-title {
-    font-family: var(--font-heading);
-    font-size: clamp(3.5rem, 9vw, 6.5rem);
+    font-family: var(--font-dj);
+    font-size: clamp(3rem, 8vw, 5.5rem);
     font-weight: 900;
     letter-spacing: 5px;
     text-transform: uppercase;
     color: #fff;
     line-height: 1;
     margin-bottom: 5px;
-    background: linear-gradient(180deg, #fff 40%, var(--neon-cyan) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
 }
 
 .dj-subtitle {
     font-family: var(--font-mono);
     font-size: clamp(1rem, 2.5vw, 1.4rem);
-    color: var(--neon-pink);
-    letter-spacing: 4px;
+    color: var(--text-secondary);
+    letter-spacing: 5px;
     text-transform: uppercase;
     margin-bottom: 25px;
-    text-shadow: 0 0 10px var(--neon-pink-glow);
 }
 
 /* Booking & Contacts Card */
 .dj-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
+    background: rgba(18, 18, 21, 0.85);
+    border: 1px solid var(--carbon-border);
+    border-radius: 6px;
     padding: 40px;
     width: 100%;
     max-width: 600px;
-    box-shadow: var(--glass-shadow);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     margin-top: 20px;
+    position: relative;
+    overflow: hidden;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Ferrari racing red trim at top */
+.dj-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--ferrari-red);
+}
+
 .dj-card:hover {
-    border-color: var(--neon-pink);
-    box-shadow: 0 0 30px rgba(255, 0, 127, 0.15);
+    border-color: rgba(209, 18, 29, 0.3);
+    box-shadow: 0 12px 40px rgba(209, 18, 29, 0.08);
 }
 
 .contact-info-list {
@@ -307,8 +360,8 @@ body {
 }
 
 .contact-info-list li a:hover {
-    color: var(--neon-cyan);
-    text-shadow: 0 0 8px var(--neon-cyan-glow);
+    color: var(--ferrari-red);
+    text-shadow: 0 0 8px var(--ferrari-red-glow);
 }
 
 .contact-info-list li i {
@@ -320,11 +373,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--neon-pink);
-    box-shadow: inset 0 0 10px rgba(255, 0, 127, 0.05);
+    color: var(--ferrari-red);
+    box-shadow: inset 0 0 10px rgba(209, 18, 29, 0.05);
 }
 
-/* DJ BUTTONS */
+/* DJ BUTTONS (Tactile racing performance style) */
 .dj-btn {
     width: 100%;
     display: inline-flex;
@@ -338,18 +391,19 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #fff;
-    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
-    border: none;
-    border-radius: 50px;
+    background: var(--ferrari-red);
+    border: 1px solid #e31824;
+    border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px var(--neon-pink-glow);
+    box-shadow: 0 4px 15px var(--ferrari-red-glow);
 }
 
 .dj-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(255, 0, 127, 0.6);
-    background: linear-gradient(135deg, #ff1a8c, #a81aff);
+    box-shadow: 0 6px 25px rgba(209, 18, 29, 0.5);
+    background: #e31824;
+    border-color: #ff3b46;
 }
 
 .dj-btn:active {
@@ -363,9 +417,9 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(4, 2, 10, 0.85);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 2000;
     display: flex;
     justify-content: center;
@@ -381,15 +435,26 @@ body {
 }
 
 .modal-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--neon-cyan);
-    border-radius: 12px;
+    background: rgba(18, 18, 21, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
     padding: 40px;
     width: 90%;
     max-width: 500px;
-    box-shadow: 0 0 40px rgba(0, 243, 255, 0.25), inset 0 0 15px rgba(0, 243, 255, 0.05);
+    box-shadow: 0 0 50px rgba(209, 18, 29, 0.25), inset 0 0 20px rgba(0, 0, 0, 0.5);
     transform: translateY(30px);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+.modal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--ferrari-red);
 }
 
 .modal-overlay.active .modal-card {
@@ -400,7 +465,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(0, 243, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding-bottom: 15px;
     margin-bottom: 25px;
 }
@@ -408,10 +473,10 @@ body {
 .modal-title {
     font-family: var(--font-heading);
     font-size: 1.8rem;
-    font-weight: 700;
+    font-weight: 900;
     color: #fff;
     letter-spacing: 2px;
-    text-shadow: 0 0 10px var(--neon-cyan-glow);
+    text-shadow: 0 0 10px var(--ferrari-red-glow);
 }
 
 .close-btn {
@@ -424,7 +489,7 @@ body {
 }
 
 .close-btn:hover {
-    color: var(--neon-pink);
+    color: var(--ferrari-red);
 }
 
 .form-group {
@@ -437,15 +502,15 @@ body {
 .form-group label {
     font-family: var(--font-mono);
     font-size: 0.85rem;
-    color: var(--neon-cyan);
+    color: var(--text-secondary);
     letter-spacing: 1px;
     text-transform: uppercase;
 }
 
 .form-input {
-    background: rgba(4, 2, 10, 0.7);
-    border: 1px solid var(--glass-border);
-    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
     padding: 12px 15px;
     color: #fff;
     font-family: var(--font-main);
@@ -455,8 +520,8 @@ body {
 }
 
 .form-input:focus {
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+    border-color: var(--ferrari-red);
+    box-shadow: 0 0 10px rgba(209, 18, 29, 0.2);
 }
 
 textarea.form-input {
@@ -472,18 +537,18 @@ textarea.form-input {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #080512;
-    background: var(--neon-cyan);
+    color: #fff;
+    background: var(--ferrari-red);
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+    box-shadow: 0 0 15px var(--ferrari-red-glow);
 }
 
 .modal-btn-submit:hover {
-    background: #5cf5ff;
-    box-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
+    background: #ff1a25;
+    box-shadow: 0 0 25px rgba(209, 18, 29, 0.5);
     transform: translateY(-1px);
 }
 
@@ -499,32 +564,32 @@ textarea.form-input {
 
 .eq-bar-static {
     width: 4px;
-    background-color: var(--neon-pink);
+    background-color: var(--ferrari-red);
     border-radius: 2px;
     animation: danceEq 1.5s ease-in-out infinite alternate;
 }
 
 /* Animations mapping */
 .eq-bar-static:nth-child(2) {
-    background-color: var(--neon-purple);
+    background-color: #ff3b46;
     animation-delay: 0.2s;
     animation-duration: 1.2s;
 }
 
 .eq-bar-static:nth-child(3) {
-    background-color: var(--neon-cyan);
+    background-color: var(--silver-chrome);
     animation-delay: 0.4s;
     animation-duration: 1.8s;
 }
 
 .eq-bar-static:nth-child(4) {
-    background-color: var(--neon-pink);
+    background-color: var(--ferrari-red);
     animation-delay: 0.1s;
     animation-duration: 1.4s;
 }
 
 .eq-bar-static:nth-child(5) {
-    background-color: var(--neon-cyan);
+    background-color: var(--silver-chrome);
     animation-delay: 0.3s;
     animation-duration: 1.6s;
 }
@@ -534,7 +599,6 @@ textarea.form-input {
     from {
         transform: rotate(0deg);
     }
-
     to {
         transform: rotate(360deg);
     }
@@ -542,11 +606,10 @@ textarea.form-input {
 
 @keyframes pulseGlow {
     from {
-        text-shadow: 0 0 5px var(--neon-pink-glow);
+        text-shadow: 0 0 5px var(--ferrari-red-glow);
     }
-
     to {
-        text-shadow: 0 0 15px rgba(255, 0, 127, 0.8), 0 0 25px rgba(255, 0, 127, 0.5);
+        text-shadow: 0 0 15px rgba(209, 18, 29, 0.8), 0 0 25px rgba(209, 18, 29, 0.5);
     }
 }
 
@@ -554,7 +617,6 @@ textarea.form-input {
     0% {
         height: 5px;
     }
-
     100% {
         height: 28px;
     }
@@ -565,16 +627,16 @@ textarea.form-input {
     .dj-nav {
         padding: 12px 20px;
     }
-
+    
     .dj-card {
         padding: 25px;
     }
-
+    
     .vinyl-wrap {
         width: 200px;
         height: 200px;
     }
-
+    
     .eq-container {
         width: 250px;
         height: 250px;
