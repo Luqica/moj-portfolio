@@ -27,12 +27,18 @@
             padding: 0;
         }
 
+        html,
+        body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: var(--font-ui);
             height: 100vh;
-            overflow: hidden;
+            overflow-y: hidden;
             position: relative;
         }
 
@@ -220,6 +226,40 @@
         .arc-reactor.state-speaking .ring {
             border-color: #00ffaa;
             box-shadow: 0 0 20px #00ffaa, inset 0 0 20px #00ffaa;
+        }
+
+        .arc-reactor.state-idle .core {
+            background: radial-gradient(circle, #00d18b 0%, #005a3c 75%, transparent 100%);
+            box-shadow: 0 0 25px #00d18b, inset 0 0 15px #00d18b;
+            animation: idlePulse 3s infinite ease-in-out alternate;
+        }
+
+        .arc-reactor.state-idle .ring {
+            border-color: #00d18b;
+            box-shadow: 0 0 12px #00d18b, inset 0 0 12px #00d18b;
+        }
+
+        .arc-reactor.state-idle .outer-ring {
+            animation-duration: 25s;
+        }
+
+        .arc-reactor.state-idle .middle-ring {
+            animation-duration: 35s;
+        }
+
+        .arc-reactor.state-idle .inner-ring {
+            animation-duration: 20s;
+        }
+
+        @keyframes idlePulse {
+            from {
+                transform: scale(0.98);
+                opacity: 0.85;
+            }
+            to {
+                transform: scale(1.02);
+                opacity: 1;
+            }
         }
 
         .arc-reactor.phone-listening .core {
@@ -657,15 +697,20 @@
             }
 
             .container {
-                padding: 15px 20px;
+                padding: 15px 15px;
                 height: auto;
                 min-height: 100vh;
+                width: 100%;
+                max-width: 100vw;
             }
 
             header {
                 flex-direction: row;
                 align-items: center;
+                justify-content: space-between;
                 margin-bottom: 15px;
+                flex-wrap: wrap;
+                gap: 10px;
             }
 
             .sys-info {
@@ -717,6 +762,7 @@
             .logs-container {
                 min-height: 350px;
                 max-height: 50vh;
+                width: 100%;
             }
 
             .time-display {
@@ -737,6 +783,11 @@
             .controls-bar {
                 justify-content: center;
                 width: 100%;
+            }
+
+            .modal-content {
+                padding: 20px 15px;
+                width: 95%;
             }
         }
     </style>
@@ -823,6 +874,17 @@
                 <input type="text" id="ws-url-input" placeholder="wss://xxxxxx.lhr.life or wss://192.168.1.x:8765"
                     autocomplete="off">
             </div>
+            <div class="troubleshoot-box" style="margin-top: 15px; border-top: 1px dashed var(--primary-dim); padding-top: 15px; font-size: 0.9rem;">
+                <p style="color: var(--text-dim); margin-bottom: 8px; line-height: 1.3;">
+                    ⚠️ <strong style="color: var(--primary-color);">SSL Connection Warning:</strong> Since this terminal runs over HTTPS, browsers block self-signed WebSocket (WSS) connections by default.
+                </p>
+                <p style="color: var(--text-dim); margin-bottom: 12px; line-height: 1.3;">
+                    To authorize the secure link, open the core connection in a new tab, click "Advanced" and "Proceed", then return and click "LINK SYSTEM".
+                </p>
+                <button class="modal-btn" onclick="authorizeSsl()" style="width: 100%; border-color: var(--primary-color); color: var(--primary-color); background: rgba(0, 243, 255, 0.05); text-shadow: 0 0 5px var(--primary-color); margin-bottom: 15px;">
+                    🔐 AUTHORIZE PORT 8765 SECURE LINK
+                </button>
+            </div>
             <div class="modal-actions">
                 <button class="modal-btn cancel-btn" onclick="closeSettings()">CANCEL</button>
                 <button class="modal-btn save-btn" onclick="saveSettings()">LINK SYSTEM</button>
@@ -850,6 +912,9 @@
         let isListeningOnPhone = false;
         let audioCtx = null;
         let activeAudioSource = null;
+        let latestCoords = null;
+        let hasLoggedDisconnect = false;
+        let ignoreAudio = false;
 
         // Clock update
         function updateClock() {
@@ -874,26 +939,50 @@
 
         // UI Modifiers
         function setMarinaState(state) {
-            reactor.classList.remove('state-listening', 'state-thinking', 'state-speaking');
+            if (state === 'THINKING' || state === 'SPEAKING' || state === 'PROCESSING...') {
+                ignoreAudio = false;
+            }
+            reactor.classList.remove('state-listening', 'state-thinking', 'state-speaking', 'phone-listening', 'state-idle');
             const coreEl = document.querySelector('.core');
 
             if (state === 'ASLEEP') {
                 marinaState.textContent = 'ASLEEP';
                 marinaState.style.color = 'var(--text-dim)';
                 marinaState.style.textShadow = 'none';
-                if (coreEl) coreEl.textContent = '';
+                if (coreEl) {
+                    coreEl.textContent = '';
+                    coreEl.style.fontSize = '3.5rem';
+                }
             } else if (state === 'LISTENING') {
-                marinaState.textContent = 'LISTENING';
-                marinaState.style.color = 'var(--primary-color)';
-                marinaState.style.textShadow = '0 0 10px var(--primary-color)';
-                reactor.classList.add('state-listening');
-                if (coreEl) coreEl.textContent = '';
+                if (isListeningOnPhone) {
+                    marinaState.textContent = 'LISTENING';
+                    marinaState.style.color = '#ff0055';
+                    marinaState.style.textShadow = '0 0 10px #ff0055';
+                    reactor.classList.add('phone-listening');
+                } else {
+                    marinaState.textContent = 'IDLE';
+                    marinaState.style.color = '#00d18b';
+                    marinaState.style.textShadow = '0 0 10px #00d18b';
+                    reactor.classList.add('state-idle');
+                }
+                if (coreEl) {
+                    coreEl.textContent = '';
+                    coreEl.style.fontSize = '3.5rem';
+                }
+                
+                // Auto-resume handsfree when back to listening state
+                if (isHandsfreeEnabled && !isListeningOnPhone) {
+                    startSpeechRecognition(true);
+                }
             } else if (state === 'THINKING') {
                 marinaState.textContent = 'PROCESSING...';
                 marinaState.style.color = '#ff00ff';
                 marinaState.style.textShadow = '0 0 10px #ff00ff';
                 reactor.classList.add('state-thinking');
-                if (coreEl) coreEl.textContent = '';
+                if (coreEl) {
+                    coreEl.textContent = '';
+                    coreEl.style.fontSize = '3.5rem';
+                }
             } else if (state === 'SPEAKING') {
                 marinaState.textContent = 'SPEAKING';
                 marinaState.style.color = '#00ffaa';
@@ -934,8 +1023,59 @@
             console.log("iOS Web Audio engine successfully unlocked!");
         }
 
+        let audioPlayTimeout = null;
+        let audioQueue = [];
+        let isAudioPlaying = false;
+
+        function sendAudioState(state) {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: 'audio_state',
+                    value: state
+                }));
+            }
+        }
+
         function playAudioData(base64Data) {
-            if (!isVoiceEnabled) return;
+            if (!isVoiceEnabled || ignoreAudio) return;
+            
+            // Push chunk into queue
+            audioQueue.push(base64Data);
+            
+            // If not playing, begin processing queue
+            if (!isAudioPlaying) {
+                processAudioQueue();
+            }
+        }
+
+        function stopAllAudio() {
+            audioQueue = [];
+            isAudioPlaying = false;
+            if (activeAudioSource) {
+                try {
+                    activeAudioSource.stop();
+                } catch (e) { }
+                activeAudioSource = null;
+            }
+            if (audioPlayTimeout) {
+                clearTimeout(audioPlayTimeout);
+                audioPlayTimeout = null;
+            }
+            sendAudioState('idle');
+        }
+
+        function processAudioQueue() {
+            if (audioQueue.length === 0) {
+                isAudioPlaying = false;
+                if (audioPlayTimeout) clearTimeout(audioPlayTimeout);
+                audioPlayTimeout = setTimeout(() => {
+                    sendAudioState('idle');
+                }, 800);
+                return;
+            }
+
+            isAudioPlaying = true;
+            const base64Data = audioQueue.shift();
 
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -944,11 +1084,13 @@
                 audioCtx.resume();
             }
 
-            if (activeAudioSource) {
-                try {
-                    activeAudioSource.stop();
-                } catch (e) { }
+            if (audioPlayTimeout) {
+                clearTimeout(audioPlayTimeout);
+                audioPlayTimeout = null;
             }
+
+            // Immediately send playing state
+            sendAudioState('playing');
 
             try {
                 const binaryString = window.atob(base64Data);
@@ -962,13 +1104,21 @@
                     const source = audioCtx.createBufferSource();
                     source.buffer = buffer;
                     source.connect(audioCtx.destination);
+                    
+                    source.onended = () => {
+                        activeAudioSource = null;
+                        processAudioQueue(); // Process next item in queue
+                    };
+                    
                     source.start(0);
                     activeAudioSource = source;
                 }, (err) => {
                     console.error("decodeAudioData error:", err);
+                    processAudioQueue();
                 });
             } catch (e) {
                 console.error("Failed to decode base64 audio:", e);
+                processAudioQueue();
             }
         }
 
@@ -982,11 +1132,7 @@
             } else {
                 btn.classList.remove('active');
                 btn.textContent = '🔇 VOICE: OFF';
-                if (activeAudioSource) {
-                    try {
-                        activeAudioSource.stop();
-                    } catch (e) { }
-                }
+                stopAllAudio();
             }
         }
 
@@ -1021,10 +1167,16 @@
             recognition.onstart = () => {
                 isListeningOnPhone = true;
                 setMarinaState('LISTENING');
-                reactor.classList.add('phone-listening');
             };
 
             recognition.onresult = (event) => {
+                // Ignore speech recognition results if MARINA is speaking or thinking
+                const isSpeakingOrThinking = (marinaState.textContent === 'PROCESSING...' || marinaState.textContent === 'SPEAKING');
+                if (isSpeakingOrThinking) {
+                    console.log("Ignoring speech result during speaking/thinking:", event.results[0][0].transcript);
+                    return;
+                }
+
                 const text = event.results[0][0].transcript;
                 if (!text) return;
 
@@ -1041,19 +1193,21 @@
                     console.error('Speech recognition error:', event.error);
                     addLog('system', `Mic Error: ${event.error}`);
                 }
-                reactor.classList.remove('phone-listening');
-                isListeningOnPhone = false;
-                setMarinaState('ASLEEP');
             };
 
             recognition.onend = () => {
-                reactor.classList.remove('phone-listening');
                 isListeningOnPhone = false;
-                setMarinaState('ASLEEP');
+                
+                const isSpeakingOrThinking = (marinaState.textContent === 'PROCESSING...' || marinaState.textContent === 'SPEAKING');
+                if (!isSpeakingOrThinking) {
+                    setMarinaState('LISTENING');
+                }
 
                 if (isHandsfreeEnabled) {
                     setTimeout(() => {
-                        if (isHandsfreeEnabled && !isListeningOnPhone) {
+                        // ONLY restart if handsfree is enabled, NOT already listening, and not in active speak/think states
+                        const isSpeakingOrThinking2 = (marinaState.textContent === 'PROCESSING...' || marinaState.textContent === 'SPEAKING');
+                        if (isHandsfreeEnabled && !isListeningOnPhone && !isSpeakingOrThinking2) {
                             startSpeechRecognition(true);
                         }
                     }, 500);
@@ -1089,12 +1243,31 @@
         }
 
         reactor.addEventListener('click', () => {
-            if (isListeningOnPhone) {
+            const isSpeaking = reactor.classList.contains('state-speaking') || (marinaState.textContent === 'SPEAKING');
+            if (isSpeaking) {
+                ignoreAudio = true;
+                stopAllAudio();
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({
+                        type: 'abort'
+                    }));
+                }
+                startSpeechRecognition();
+            } else if (isListeningOnPhone) {
                 stopSpeechRecognition();
             } else {
                 startSpeechRecognition();
             }
         });
+
+        // Global click/touch listener to unlock AudioContext on first interaction
+        const unlockHandler = () => {
+            unlockPhoneAudio();
+            document.removeEventListener('click', unlockHandler);
+            document.removeEventListener('touchstart', unlockHandler);
+        };
+        document.addEventListener('click', unlockHandler);
+        document.addEventListener('touchstart', unlockHandler);
 
         // Terminal Typed Input fallback
         const terminalInput = document.getElementById('terminal-input');
@@ -1125,6 +1298,15 @@
             // Standard fallback using location
             const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
             const wsHost = window.location.hostname || '127.0.0.1';
+
+            // Auto-detect public Cloudflare tunnel domain variations
+            // Primary domain served by Cloudflare tunnel (e.g., marina.lukakolarek.from.hr)
+            // may have a dedicated WS subdomain prefixed with 'ws-'.
+            if (wsHost === 'marina.lukakolarek.from.hr' || wsHost === 'ws-marina.lukakolarek.from.hr') {
+                return 'wss://ws-marina.lukakolarek.from.hr';
+            }
+
+            // Fallback to direct host with port 8765
             return `${wsProtocol}://${wsHost}:8765`;
         }
 
@@ -1139,18 +1321,37 @@
 
         function saveSettings() {
             const url = wsUrlInput.value.trim();
-            if (url) {
-                localStorage.setItem('marina_ws_url', url);
-                addLog('system', `Terminal bound to uplink: ${url}`);
-                closeSettings();
-
-                // Reconnect with new URL
-                if (ws) {
-                    ws.onclose = null; // Prevent double reconnect triggers
-                    ws.close();
-                }
-                connect();
+            if (!url) {
+                addLog('system', 'Error: No WebSocket URL provided.');
+                return;
             }
+            // Basic validation for ws(s):// prefix
+            if (!/^wss?:\/\//i.test(url)) {
+                addLog('system', 'Error: WebSocket URL must start with ws:// or wss://');
+                return;
+            }
+            localStorage.setItem('marina_ws_url', url);
+            addLog('system', `Terminal bound to uplink: ${url}`);
+            closeSettings();
+
+            // Open HTTPS version for SSL certificate authorization if using wss
+            if (url.startsWith('wss://')) {
+                const httpsUrl = url.replace(/^wss:/i, 'https:');
+                window.open(httpsUrl, '_blank');
+            }
+
+            // Reconnect with new URL after a short delay to allow auth tab to load
+            if (ws) {
+                ws.onclose = null; // Prevent double reconnect triggers
+                ws.close();
+            }
+            setTimeout(connect, 2000);
+        }
+
+        function authorizeSsl() {
+            const currentUrl = wsUrlInput.value.trim() || getUplinkUrl();
+            let httpUrl = currentUrl.replace(/^wss:/i, 'https:').replace(/^ws:/i, 'http:');
+            window.open(httpUrl, '_blank');
         }
 
         // WebSocket Connection
@@ -1164,6 +1365,10 @@
                 ws = new WebSocket(targetUrl);
             } catch (e) {
                 console.error("WebSocket initialization failed:", e);
+                if (!hasLoggedDisconnect) {
+                    addLog('system', 'Connection lost. Attempting to reconnect...');
+                    hasLoggedDisconnect = true;
+                }
                 setTimeout(connect, reconnectInterval);
                 return;
             }
@@ -1172,12 +1377,29 @@
                 wsStatus.textContent = 'CONNECTED';
                 wsStatus.className = 'ws-connected';
                 addLog('system', 'WebSocket connection established with MARINA Core.');
+                hasLoggedDisconnect = false;
+                
+                // Automatically start speech recognition if handsfree is enabled
+                if (isHandsfreeEnabled) {
+                    startSpeechRecognition(true);
+                }
+                
+                if (latestCoords && ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({
+                        type: 'location',
+                        latitude: latestCoords.lat,
+                        longitude: latestCoords.lon
+                    }));
+                }
             };
 
             ws.onclose = () => {
                 wsStatus.textContent = 'DISCONNECTED';
                 wsStatus.className = 'ws-disconnected';
-                addLog('system', 'Connection lost. Attempting to reconnect...');
+                if (!hasLoggedDisconnect) {
+                    addLog('system', 'Connection lost. Attempting to reconnect...');
+                    hasLoggedDisconnect = true;
+                }
                 setMarinaState('ASLEEP');
                 setTimeout(connect, reconnectInterval);
             };
@@ -1205,10 +1427,19 @@
                         const weatherEmojis = ['☀️', '🌤️', '🌤', '⛅', '🌥️', '🌥', '☁️', '☁', '🌦️', '🌦', '🌧️', '🌧', '⛈️', '⛈', '🌩️', '🌩', '❄️', '❄', '🌫️', '🌫', '🌪️', '🌪', '💨'];
                         const coreEl = document.querySelector('.core');
                         if (coreEl) {
-                            for (const emoji of weatherEmojis) {
-                                if (data.text.includes(emoji)) {
-                                    coreEl.textContent = emoji;
-                                    break;
+                            coreEl.textContent = '';
+                            coreEl.style.fontSize = '3.5rem';
+                            
+                            const vehicleMatch = data.text.match(/(?:Bus|Tram)?\s*(🚌|🚋|🚃)\s*(\d+)/i);
+                            if (vehicleMatch) {
+                                coreEl.textContent = `${vehicleMatch[1]} ${vehicleMatch[2]}`;
+                                coreEl.style.fontSize = '1.8rem';
+                            } else {
+                                for (const emoji of weatherEmojis) {
+                                    if (data.text.includes(emoji)) {
+                                        coreEl.textContent = emoji;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -1222,6 +1453,35 @@
                 }
             };
         }
+
+        function initLocationWatching() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        latestCoords = { lat, lon };
+                        console.log(`Updated location: ${lat}, ${lon}`);
+                        if (ws && ws.readyState === WebSocket.OPEN) {
+                            ws.send(JSON.stringify({
+                                type: 'location',
+                                latitude: lat,
+                                longitude: lon
+                            }));
+                        }
+                    },
+                    (err) => {
+                        console.warn("Geolocation warning:", err.message);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        maximumAge: 30000,
+                        timeout: 10000
+                    }
+                );
+            }
+        }
+        initLocationWatching();
 
         // Initialize connection
         connect();
