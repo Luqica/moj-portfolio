@@ -1152,6 +1152,38 @@
             }
         }
 
+        let speechSilenceTimeout = null;
+        let lastVoiceText = '';
+
+        function commitVoiceCommand(text) {
+            if (speechSilenceTimeout) {
+                clearTimeout(speechSilenceTimeout);
+                speechSilenceTimeout = null;
+            }
+
+            const command = (text || lastVoiceText || '').trim();
+            lastVoiceText = '';
+
+            if (!command) return;
+
+            if (terminalInput) {
+                terminalInput.value = '';
+            }
+
+            console.log("Committing voice command to MARINA:", command);
+
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: 'command',
+                    text: command
+                }));
+            } else {
+                addLog('system', 'Error: Not connected to MARINA.');
+            }
+
+            stopSpeechRecognition();
+        }
+
         function initSpeechRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
@@ -1160,12 +1192,17 @@
             }
 
             recognition = new SpeechRecognition();
-            recognition.continuous = false;
-            recognition.interimResults = false;
+
+            // On iOS Safari, continuous = true can be unreliable, but on desktop and Android, continuous = true ensures the whole sentence is heard without cutting off after the first word
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            recognition.continuous = !isIOS;
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
             recognition.lang = 'en-US';
 
             recognition.onstart = () => {
                 isListeningOnPhone = true;
+                lastVoiceText = '';
                 setMarinaState('LISTENING');
             };
 
@@ -1173,23 +1210,46 @@
                 // Ignore speech recognition results if MARINA is speaking or thinking
                 const isSpeakingOrThinking = (marinaState.textContent === 'PROCESSING...' || marinaState.textContent === 'SPEAKING');
                 if (isSpeakingOrThinking) {
-                    console.log("Ignoring speech result during speaking/thinking:", event.results[0][0].transcript);
+                    console.log("Ignoring speech result during speaking/thinking");
                     return;
                 }
 
-                const text = event.results[0][0].transcript;
-                if (!text) return;
+                let finalTranscript = '';
+                let interimTranscript = '';
 
-                if (ws && ws.readyState === WebSocket.OPEN) {
-                    ws.send(JSON.stringify({
-                        type: 'command',
-                        text: text
-                    }));
+                // Concatenate all results across the current recognition stream
+                for (let i = 0; i < event.results.length; ++i) {
+                    const res = event.results[i];
+                    if (res.isFinal) {
+                        finalTranscript += res[0].transcript + ' ';
+                    } else {
+                        interimTranscript += res[0].transcript;
+                    }
                 }
+
+                const fullText = (finalTranscript + interimTranscript).trim().replace(/\s+/g, ' ');
+                if (!fullText) return;
+
+                lastVoiceText = fullText;
+
+                // Provide live transcription feedback in the terminal input
+                if (terminalInput) {
+                    terminalInput.value = fullText;
+                }
+
+                // Reset speech silence timer whenever user continues speaking
+                if (speechSilenceTimeout) {
+                    clearTimeout(speechSilenceTimeout);
+                }
+
+                // Wait for 1.3s pause in speech to finalize the entire sentence
+                speechSilenceTimeout = setTimeout(() => {
+                    commitVoiceCommand(fullText);
+                }, 1300);
             };
 
             recognition.onerror = (event) => {
-                if (event.error !== 'no-speech') {
+                if (event.error !== 'no-speech' && event.error !== 'aborted') {
                     console.error('Speech recognition error:', event.error);
                     addLog('system', `Mic Error: ${event.error}`);
                 }
@@ -1197,7 +1257,21 @@
 
             recognition.onend = () => {
                 isListeningOnPhone = false;
-                
+
+                // If recognition ended with pending speech that hasn't been committed, commit it now
+                if (speechSilenceTimeout || lastVoiceText) {
+                    if (speechSilenceTimeout) {
+                        clearTimeout(speechSilenceTimeout);
+                        speechSilenceTimeout = null;
+                    }
+                    if (lastVoiceText) {
+                        const pending = lastVoiceText;
+                        lastVoiceText = '';
+                        commitVoiceCommand(pending);
+                        return;
+                    }
+                }
+
                 const isSpeakingOrThinking = (marinaState.textContent === 'PROCESSING...' || marinaState.textContent === 'SPEAKING');
                 if (!isSpeakingOrThinking) {
                     setMarinaState('LISTENING');
@@ -1225,20 +1299,35 @@
 
             if (isListeningOnPhone) return;
 
+            if (speechSilenceTimeout) {
+                clearTimeout(speechSilenceTimeout);
+                speechSilenceTimeout = null;
+            }
+            lastVoiceText = '';
+
             try {
                 unlockPhoneAudio();
                 recognition.start();
                 if (!silent) {
-                    addLog('system', 'Phone microphone activated.');
+                    addLog('system', 'Microphone activated. Listening...');
                 }
             } catch (e) {
-                console.error(e);
+                console.warn("Recognition start skipped or already active:", e);
             }
         }
 
         function stopSpeechRecognition() {
+            if (speechSilenceTimeout) {
+                clearTimeout(speechSilenceTimeout);
+                speechSilenceTimeout = null;
+            }
+            lastVoiceText = '';
             if (recognition && isListeningOnPhone) {
-                recognition.stop();
+                try {
+                    recognition.stop();
+                } catch (e) {
+                    console.error(e);
+                }
             }
         }
 
@@ -1254,7 +1343,12 @@
                 }
                 startSpeechRecognition();
             } else if (isListeningOnPhone) {
-                stopSpeechRecognition();
+                // If the user spoke words and clicks reactor, commit immediately!
+                if (lastVoiceText) {
+                    commitVoiceCommand(lastVoiceText);
+                } else {
+                    stopSpeechRecognition();
+                }
             } else {
                 startSpeechRecognition();
             }
