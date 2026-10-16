@@ -112,128 +112,7 @@ window.addEventListener('load', () => {
             startGlitch(mainHeader);
         }, 500); // Slight delay for dramatic effect
     }
-    
-    // Initialize glowing electric circuit background
-    initCircuitBackground();
 });
-
-// --- Animated Electric Circuit Background ---
-function initCircuitBackground() {
-    const canvas = document.getElementById('bg-canvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    const paths = [];
-    const numPaths = 12;
-
-    function createPath() {
-        const points = [];
-        let x = Math.random() * canvas.width;
-        let y = Math.random() * canvas.height;
-        points.push({ x, y });
-
-        const segments = 3 + Math.floor(Math.random() * 3);
-        const step = 80 + Math.random() * 120;
-
-        for (let i = 0; i < segments; i++) {
-            const dir = Math.floor(Math.random() * 3);
-            const signX = Math.random() > 0.5 ? 1 : -1;
-            const signY = Math.random() > 0.5 ? 1 : -1;
-
-            if (dir === 0) {
-                x += step * signX;
-            } else if (dir === 1) {
-                y += step * signY;
-            } else {
-                x += step * 0.707 * signX;
-                y += step * 0.707 * signY;
-            }
-            points.push({ x, y });
-        }
-
-        return {
-            points,
-            color: 'rgba(0, 240, 255, 0)', // Set wire color to transparent to blend with wallpaper
-            pulseColor: 'rgba(0, 240, 255, 0.85)',
-            pulseGlow: '#00f0ff',
-            pulses: []
-        };
-    }
-
-    for (let i = 0; i < numPaths; i++) {
-        paths.push(createPath());
-    }
-
-    function spawnPulse() {
-        const pathIndex = Math.floor(Math.random() * paths.length);
-        const path = paths[pathIndex];
-        if (path && path.pulses.length < 2) {
-            path.pulses.push({
-                progress: 0,
-                speed: 0.003 + Math.random() * 0.005
-            });
-        }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        paths.forEach((path, pathIndex) => {
-            const firstPt = path.points[0];
-            if (firstPt.x < -200 || firstPt.x > canvas.width + 200 || firstPt.y < -200 || firstPt.y > canvas.height + 200) {
-                paths[pathIndex] = createPath();
-                return;
-            }
-            // Base wire stroke and connection nodes are omitted to allow the electron pulses 
-            // to blend seamlessly and travel strictly along the background wallpaper's printed lines.
-
-            for (let p = path.pulses.length - 1; p >= 0; p--) {
-                const pulse = path.pulses[p];
-                pulse.progress += pulse.speed;
-
-                if (pulse.progress >= 1) {
-                    path.pulses.splice(p, 1);
-                    continue;
-                }
-
-                const currentSegment = pulse.progress * (path.points.length - 1);
-                const segmentIdx = Math.floor(currentSegment);
-                const segmentProgress = currentSegment - segmentIdx;
-
-                const p1 = path.points[segmentIdx];
-                const p2 = path.points[segmentIdx + 1];
-
-                if (p1 && p2) {
-                    const px = p1.x + (p2.x - p1.x) * segmentProgress;
-                    const py = p1.y + (p2.y - p1.y) * segmentProgress;
-
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = path.pulseGlow;
-                    ctx.beginPath();
-                    ctx.arc(px, py, 3, 0, Math.PI * 2);
-                    ctx.fillStyle = path.pulseColor;
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-                }
-            }
-        });
-
-        if (Math.random() < 0.0035) {
-            spawnPulse();
-        }
-
-        requestAnimationFrame(animate);
-    }
-
-    animate();
-}
 
 // --- Smooth Scrolling for Navigation ---
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -248,5 +127,31 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 behavior: 'smooth'
             });
         }
+    });
+});
+
+
+// --- 3D Glass Card Tilt Effect ---
+const cards = document.querySelectorAll('.glass-card:not(#about .glass-card)');
+
+cards.forEach(card => {
+    if (card.closest('#about')) return;
+
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = ((centerY - y) / centerY) * 10;
+        const rotateY = ((x - centerX) / centerX) * 10;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
     });
 });

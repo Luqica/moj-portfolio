@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Rajdhani:wght@500;600;700&family=Titillium+Web:wght@300;400;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Rajdhani:wght@500;600;700&family=Titillium+Web:wght@300;400;600&family=Orbitron:wght@600;800;900&family=Syncopate:wght@700&display=swap"
         rel="stylesheet">
 
     <!-- FontAwesome -->
@@ -21,15 +21,16 @@
 </head>
 
 <body>
+
     <!-- Background Canvas for Electric circuit overlay -->
     <canvas id="bg-canvas" class="bg-canvas"></canvas>
 
     <!-- Intro Video Screen -->
     <div id="intro-screen" class="video-container">
-        <video id="video-desktop" class="bg-video hide-on-mobile" autoplay muted playsinline>
+        <video id="video-desktop" class="bg-video hide-on-mobile" autoplay muted playsinline poster="wallpaper.png">
             <source src="wp_video_desktop.mp4" type="video/mp4">
         </video>
-        <video id="video-mobile" class="bg-video hide-on-desktop" autoplay muted playsinline>
+        <video id="video-mobile" class="bg-video hide-on-desktop" autoplay muted playsinline poster="wallpaper.png">
             <source src="wp_video_mobile.mp4" type="video/mp4">
         </video>
     </div>
@@ -50,6 +51,7 @@
             <a href="#skills">Skills</a>
             <a href="#contact">Contact</a>
         </div>
+
     </nav>
 
     <!-- Main Content -->
@@ -60,9 +62,16 @@
             <div class="hero-content">
                 <h1 class="main-header">LUKA KOLAREK</h1>
                 <h2 class="sub-header typewriter">Mechatronics and Robotics Student</h2>
-                <a href="#about" class="scroll-indicator">
+                <a href="#transition-quote" class="scroll-indicator">
                     <i class="fa-solid fa-chevron-down"></i>
                 </a>
+            </div>
+        </section>
+
+        <!-- Scroll Transition Quote Section -->
+        <section id="transition-quote" class="section quote-transition reveal">
+            <div class="large-quote-container">
+                <h2 class="large-quote">"Fear kills dreams more than failure ever will"</h2>
             </div>
         </section>
 

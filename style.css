@@ -1,34 +1,27 @@
 /* --- CSS VARIABLES & THEME --- */
 :root {
-    --bg-color: #05050a;
-    --text-primary: #e0e6ed;
-    --text-secondary: #9aa4b5;
+    --bg-color: #040406; /* Deep dark mechatronics space black */
+    --text-primary: #ffffff;
+    --text-secondary: #a2a2aa;
 
-    /* Neon Accents */
-    --accent-blue: #00f0ff;
+    /* Accents - Mechatronics Blue & Purple */
+    --accent-blue: #00f0ff; /* Mechatronics Cyan */
     --accent-blue-glow: rgba(0, 240, 255, 0.4);
-    --accent-purple: #b026ff;
+    --accent-purple: #b026ff; /* Mechatronics Purple */
 
     /* Sleek Tech Panels */
-    --glass-bg: rgba(10, 12, 16, 0.85);
+    --glass-bg: rgba(10, 12, 16, 0.88);
     --glass-border: rgba(0, 240, 255, 0.2);
-    --glass-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.8);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.85);
 
     /* Fonts */
     --font-main: 'Titillium Web', sans-serif;
-    --font-heading: 'Rajdhani', sans-serif;
+    --font-heading: 'Orbitron', sans-serif;
     --font-mono: 'Fira Code', monospace;
 }
 
 .bg-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -2;
-    pointer-events: none;
-    opacity: 0.6;
+    display: none;
 }
 
 /* --- RESET & GLOBAL --- */
@@ -41,6 +34,11 @@
 
 body {
     background-color: var(--bg-color);
+    background-image: url('wallpaper.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
     color: var(--text-primary);
     font-family: var(--font-main);
     overflow-x: hidden;
@@ -54,10 +52,8 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(rgba(5, 5, 10, 0.8), rgba(5, 5, 10, 0.8)), url("eng_wallpaper.webp");
+    background: #040406 url('wallpaper.png') no-repeat center center;
     background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
     z-index: -3;
     pointer-events: none;
 }
@@ -240,20 +236,22 @@ body::before {
 
 /* --- TYPOGRAPHY --- */
 .main-header {
-    font-family: var(--font-heading);
-    font-size: clamp(3rem, 8vw, 6rem);
-    font-weight: 900;
-    letter-spacing: 4px;
+    font-family: 'Syncopate', sans-serif;
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: 3px;
     color: #fff;
     text-transform: uppercase;
     margin-bottom: 10px;
+    text-shadow: none;
 }
 
 .sub-header {
     font-family: var(--font-mono);
-    font-size: clamp(1rem, 3vw, 1.5rem);
+    font-size: clamp(1rem, 3vw, 1.4rem);
     color: var(--accent-blue);
     margin-bottom: 50px;
+    text-shadow: 0 0 10px var(--accent-blue-glow), 0 0 20px rgba(0, 240, 255, 0.25);
 }
 
 .section-title {
@@ -308,6 +306,33 @@ body::before {
     }
 }
 
+/* --- SCROLL TRANSITION QUOTE --- */
+.quote-transition {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 80px 20px;
+    text-align: center;
+    background: transparent;
+}
+
+.large-quote-container {
+    max-width: 1100px;
+    width: 100%;
+}
+
+.large-quote {
+    font-family: 'Syncopate', sans-serif;
+    font-size: clamp(2rem, 5.5vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.35;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-shadow: 0 0 20px var(--accent-blue-glow);
+    margin: 0;
+}
+
 /* --- ABOUT SECTION --- */
 .layout-split {
     display: grid;
@@ -348,7 +373,7 @@ body::before {
     left: -15px;
     right: -15px;
     bottom: -15px;
-    background: linear-gradient(45deg, #00ffcc, #9d00ff);
+    background: linear-gradient(45deg, #00f0ff, #b026ff);
     border-radius: 50%;
     z-index: 1;
     filter: blur(25px);
@@ -661,6 +686,30 @@ body::before {
 }
 
 
+
+
+/* 3D Card Hover States */
+.glass-card {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.glass-card > * {
+    transform: translateZ(20px);
+}
+
+#about .glass-card {
+    transform: none !important;
+    transform-style: flat;
+    perspective: none;
+}
+
+#about .glass-card > * {
+    transform: none !important;
+}
+
+
 /* --- MOBILE RESPONSIVENESS --- */
 .mobile-menu-btn {
     display: none;
@@ -708,4 +757,5 @@ body::before {
             opacity: 1;
         }
     }
+
 }
